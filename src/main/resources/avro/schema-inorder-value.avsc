@@ -1,0 +1,43 @@
+{
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "customerName",
+      "type": "string"
+    },
+    {
+      "name": "orderDate",
+      "type": "string"
+    },
+    {
+      "name": "orderLines",
+      "type": {
+        "items": {
+          "fields": [
+            {
+              "name": "productId",
+              "type": "string"
+            },
+            {
+              "name": "quantity",
+              "type": "long"
+            },
+            {
+              "name": "price",
+              "type": "float"
+            }
+          ],
+          "name": "OrderLineInput",
+          "type": "record"
+        },
+        "type": "array"
+      }
+    }
+  ],
+  "name": "OrderInput",
+  "type": "record",
+  "namespace": "net.joelfernandes.OrderManagementSystem.avro"
+}

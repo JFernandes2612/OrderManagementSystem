@@ -1,0 +1,49 @@
+#spring.datasource.url=jdbc:oracle:thin:@//127.0.0.1:1521/FREEPDB1
+#spring.datasource.username=sys as sysdba
+#spring.datasource.password=password
+#spring.jpa.hibernate.ddl-auto=create
+
+spring:
+  application:
+    name: Initial Project
+
+  datasource:
+    url: jdbc:h2:file:./db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+
+
+ordman:
+  serviceaccount:
+    name: user
+    password: password
+    namespace: ord.man
+  sasl:
+    mechanism: "PLAIN"
+    jaas:
+      config: org.apache.kafka.common.security.plain.PlainLoginModule required username='${ordman.serviceaccount.name}' password='${ordman.serviceaccount.password}';}
+  basic:
+    auth:
+      credentials:
+        source: USER_INFO
+      user:
+        info: ${ordman.serviceaccount.name}:${ordman.serviceaccount.password}
+  security:
+    protocol: "PLAINTEXT"
+  kafka:
+    consumer:
+      bootstrap-servers-config: http://localhost:9092
+      schema-registry-url-config: http://localhost:8081
+      group-id: initial-project
+      auto-offset-reset: earliest
+      key-deserializer-class-config: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserialize-class-config: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      specific:
+        avro:
+          reader: true
