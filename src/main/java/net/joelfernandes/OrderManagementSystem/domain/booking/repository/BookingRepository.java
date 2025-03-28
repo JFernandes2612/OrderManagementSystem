@@ -5,7 +5,7 @@ import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
 
 public interface BookingRepository {
-    Booking saveBooking(Booking booking);
+    Optional<Booking> saveBooking(Booking booking);
 
     Optional<Booking> findByBookingId(String bookingId);
 

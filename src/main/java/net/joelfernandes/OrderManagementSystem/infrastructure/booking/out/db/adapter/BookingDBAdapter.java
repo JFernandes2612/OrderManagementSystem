@@ -19,10 +19,10 @@ public class BookingDBAdapter implements BookingRepository {
     private final BookingJPARepository bookingJPARepository;
 
     @Override
-    public Booking saveBooking(Booking booking) {
+    public Optional<Booking> saveBooking(Booking booking) {
         BookingEntity bookingEntity = BookingMapper.INSTANCE.toBookingEntity(booking);
         BookingEntity savedBooking = bookingJPARepository.save(bookingEntity);
-        return BookingEntityMapper.INSTANCE.toBooking(savedBooking);
+        return Optional.ofNullable(BookingEntityMapper.INSTANCE.toBooking(savedBooking));
     }
 
     @Override

@@ -19,9 +19,10 @@ public class OrderDBAdapter implements OrderRepository {
     private final OrderJPARepository repository;
 
     @Override
-    public void saveOrder(Order order) {
+    public Optional<Order> saveOrder(Order order) {
         OrderEntity orderEntity = OrderMapper.INSTANCE.toOrderEntity(order);
-        repository.save(orderEntity);
+        return Optional.ofNullable(
+                OrderEntityMapper.INSTANCE.toOrder(repository.save(orderEntity)));
     }
 
     @Override

@@ -1,12 +1,10 @@
 package net.joelfernandes.OrderManagementSystem.application.booking.in.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Builder
+@Getter
 public class BookingInput {
     private String bookingId;
     private String customerCode;

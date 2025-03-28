@@ -1,6 +1,7 @@
 package net.joelfernandes.OrderManagementSystem.domain.order.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
@@ -14,13 +15,13 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public void saveOrder(Order order) {
+    public Optional<Order> saveOrder(Order order) {
         if (orderRepository.findOrderById(order.getOrderId()).isPresent()) {
             log.error("Order with id '%s' already exists!".formatted(order.getOrderId()));
-            return;
+            return Optional.empty();
         }
 
-        orderRepository.saveOrder(order);
+        return orderRepository.saveOrder(order);
     }
 
     public List<Order> getAllOrders() {

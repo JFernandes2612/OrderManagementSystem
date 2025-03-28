@@ -20,10 +20,10 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final OrderRepository orderRepository;
 
-    public Booking saveBooking(BookingDTO booking) {
+    public Optional<Booking> saveBooking(BookingDTO booking) {
         if (bookingRepository.findByBookingId(booking.getBookingId()).isPresent()) {
             log.error("Booking with id '%s' already exists!".formatted(booking.getBookingId()));
-            return null;
+            return Optional.empty();
         }
 
         Optional<Order> order = orderRepository.findOrderById(booking.getOrderId());
@@ -32,7 +32,7 @@ public class BookingService {
             log.error(
                     "Order '%s' to create booking with id '%s' does not exists!"
                             .formatted(booking.getOrderId(), booking.getBookingId()));
-            return null;
+            return Optional.empty();
         }
 
         Optional<Booking> bookingWithSameOrderId =
@@ -44,7 +44,7 @@ public class BookingService {
                             .formatted(
                                     bookingWithSameOrderId.get().getOrder().getOrderId(),
                                     bookingWithSameOrderId.get().getBookingId()));
-            return null;
+            return Optional.empty();
         }
 
         Booking bookingDomain = BookingDTOMapper.INSTANCE.toBooking(booking);

@@ -6,6 +6,7 @@ import net.joelfernandes.OrderManagementSystem.application.booking.in.GetBooking
 import net.joelfernandes.OrderManagementSystem.application.booking.in.SaveBookingUseCase;
 import net.joelfernandes.OrderManagementSystem.application.booking.in.model.BookingInput;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,10 @@ public class BookingController {
     }
 
     @PostMapping("save")
-    public Booking saveBooking(BookingInput bookingInput) {
-        return saveBookingUseCase.receiveBooking(bookingInput);
+    public ResponseEntity<Booking> saveBooking(BookingInput bookingInput) {
+        return saveBookingUseCase
+                .receiveBooking(bookingInput)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

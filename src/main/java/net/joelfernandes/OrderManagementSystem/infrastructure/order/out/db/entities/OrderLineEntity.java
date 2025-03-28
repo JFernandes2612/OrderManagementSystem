@@ -8,14 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderLineEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private @Id long id;

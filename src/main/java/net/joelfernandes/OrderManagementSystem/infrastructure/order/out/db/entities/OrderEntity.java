@@ -7,14 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
 @Builder
+@Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderEntity {
     private @Id String orderId;
 

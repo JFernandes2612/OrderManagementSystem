@@ -1,5 +1,6 @@
 package net.joelfernandes.OrderManagementSystem.application.booking.in;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.joelfernandes.OrderManagementSystem.application.booking.in.model.BookingInput;
 import net.joelfernandes.OrderManagementSystem.application.booking.in.model.BookingInputMapper;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class SaveBookingUseCase {
     private final BookingService bookingService;
 
-    public Booking receiveBooking(BookingInput booking) {
+    public Optional<Booking> receiveBooking(BookingInput booking) {
         return bookingService.saveBooking(BookingInputMapper.INSTANCE.toBookingDTO(booking));
     }
 }
