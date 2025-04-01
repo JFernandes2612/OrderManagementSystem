@@ -15,10 +15,6 @@ class CustomErrorHandler extends DefaultErrorHandler {
         backOffExecution = backOff.start();
     }
 
-    // By default, error handler doesn't catch Deserialization Errors which include no connection to
-    // the Schema Registry
-    // We need to override this function to have a timeout between retries on those errors
-    // Make sure that NonRetryable exceptions such as InvalidConfiguration are not retried
     @Override
     public void handleOtherException(
             Exception thrownException,
