@@ -1,12 +1,14 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.booking.out.db.entities;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
+import net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities.OrderEntity;
+import net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities.OrderLineEntity;
 import org.junit.jupiter.api.Test;
 
 class BookingMapperTests {
@@ -25,13 +27,35 @@ class BookingMapperTests {
     private static final String CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
+    private final BookingMapper bookingMapper = BookingMapper.INSTANCE;
+
     @Test
     void shouldMapBookingToBookingEntity() {
         Booking booking = getBooking();
 
-        BookingEntity bookingEntity = BookingMapper.INSTANCE.toBookingEntity(booking);
+        BookingEntity bookingEntity = bookingMapper.toBookingEntity(booking);
 
         assertEquals(BOOKING_ID, bookingEntity.getBookingId());
+        assertEquals(BOOKING_CUSTOMER_CODE, bookingEntity.getCustomerCode());
+        assertEquals(BOOKING_SUPPLIER_CODE, bookingEntity.getSupplierCode());
+        assertEquals(BOOKING_FACTORY_CODE, bookingEntity.getFactoryCode());
+
+        OrderEntity orderEntity = bookingEntity.getOrder();
+        assertEquals(ORDER_ID, orderEntity.getOrderId());
+        assertEquals(CUSTOMER_NAME, orderEntity.getCustomerName());
+        assertEquals(ORDER_DATE, orderEntity.getOrderDate());
+
+        assertEquals(booking.getOrder().getOrderLines().size(), orderEntity.getOrderLines().size());
+
+        OrderLineEntity firstOrderLineEntity = orderEntity.getOrderLines().getFirst();
+        assertEquals(ORDER_LINE_PRODUCT1_ID, firstOrderLineEntity.getProductId());
+        assertEquals(ORDER_LINE_QUANTITY, firstOrderLineEntity.getQuantity());
+        assertEquals(ORDER_LINE_PRICE, firstOrderLineEntity.getPrice());
+
+        OrderLineEntity secondOrderLineEntity = orderEntity.getOrderLines().getLast();
+        assertEquals(ORDER_LINE_PRODUCT2_ID, secondOrderLineEntity.getProductId());
+        assertEquals(ORDER_LINE_QUANTITY, secondOrderLineEntity.getQuantity());
+        assertEquals(ORDER_LINE_PRICE, secondOrderLineEntity.getPrice());
     }
 
     private static Booking getBooking() {

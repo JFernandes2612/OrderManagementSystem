@@ -13,6 +13,8 @@ class BookingInputMapperTests {
     private static final String BOOKING_FACTORY_CODE = "factoryCode";
     private static final String BOOKING_ORDER_ID = "orderId";
 
+    private final BookingInputMapper bookingInputMapper = BookingInputMapper.INSTANCE;
+
     @Test
     void shouldMapFromBookingInputToBookingDTO() {
         BookingInput bookingInput =
@@ -24,7 +26,7 @@ class BookingInputMapperTests {
                         .orderId(BOOKING_ORDER_ID)
                         .build();
 
-        BookingDTO bookingDTO = BookingInputMapper.INSTANCE.toBookingDTO(bookingInput);
+        BookingDTO bookingDTO = bookingInputMapper.toBookingDTO(bookingInput);
 
         assertEquals(BOOKING_ID, bookingDTO.getBookingId());
         assertEquals(BOOKING_CUSTOMER_CODE, bookingDTO.getCustomerCode());
