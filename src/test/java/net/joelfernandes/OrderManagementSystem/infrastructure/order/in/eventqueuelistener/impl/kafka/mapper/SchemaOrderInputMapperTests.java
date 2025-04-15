@@ -34,11 +34,14 @@ class SchemaOrderInputMapperTests {
 
     @Test
     void shouldMapSchemaOrderInputToOrderInput() {
+        // given
         net.joelfernandes.OrderManagementSystem.avro.OrderInput schemaOrderInput =
                 getSchemaOrderInput();
 
+        // when
         OrderInput order = schemaOrderInputMapper.toOrderInput(schemaOrderInput);
 
+        // then
         assertEquals(ORDER_ID, order.getOrderId());
         assertEquals(ORDER_CUSTOMER_NAME, order.getCustomerName());
         assertEquals(ORDER_DATE, order.getOrderDate());

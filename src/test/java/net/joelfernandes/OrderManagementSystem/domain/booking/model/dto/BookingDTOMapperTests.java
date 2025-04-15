@@ -16,6 +16,7 @@ class BookingDTOMapperTests {
 
     @Test
     void shouldMapFromBookingDTOToBooking() {
+        // given
         BookingDTO bookingDTO =
                 BookingDTO.builder()
                         .bookingId(BOOKING_ID)
@@ -25,8 +26,10 @@ class BookingDTOMapperTests {
                         .orderId(BOOKING_ORDER_ID)
                         .build();
 
+        // when
         Booking booking = bookingDTOMapper.toBooking(bookingDTO);
 
+        // then
         assertEquals(BOOKING_ID, booking.getBookingId());
         assertEquals(BOOKING_CUSTOMER_CODE, booking.getCustomerCode());
         assertEquals(BOOKING_SUPPLIER_CODE, booking.getSupplierCode());

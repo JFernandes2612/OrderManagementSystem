@@ -33,23 +33,29 @@ class BookingEntityMapperTests {
 
     @Test
     void shouldMapBookingEntityToBooking() {
+        // given
         BookingEntity bookingEntity = getBookingEntity(BOOKING1_ID);
 
+        // when
         Booking booking = bookingEntityMapper.toBooking(bookingEntity);
 
+        // then
         checkBooking(booking, BOOKING1_ID);
     }
 
     @Test
     void shouldMapBookingEntityListToBookingList() {
+        // given
         BookingEntity firstBookingEntity = getBookingEntity(BOOKING1_ID);
         BookingEntity secondBookingEntity = getBookingEntity(BOOKING2_ID);
 
         List<BookingEntity> bookingEntities =
                 Arrays.asList(firstBookingEntity, secondBookingEntity);
 
+        // when
         List<Booking> bookings = bookingEntityMapper.toBookingList(bookingEntities);
 
+        // then
         assertEquals(bookingEntities.size(), bookings.size());
 
         checkBooking(bookings.get(0), BOOKING1_ID);

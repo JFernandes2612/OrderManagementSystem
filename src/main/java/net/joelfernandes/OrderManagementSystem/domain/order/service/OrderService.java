@@ -17,7 +17,7 @@ public class OrderService {
 
     public Optional<Order> saveOrder(Order order) {
         if (orderRepository.findOrderById(order.getOrderId()).isPresent()) {
-            log.error("Order with id '%s' already exists!".formatted(order.getOrderId()));
+            log.error("Order with id '{}' already exists!", order.getOrderId());
             return Optional.empty();
         }
 

@@ -25,22 +25,28 @@ class OrderEntityMapperTests {
 
     @Test
     void shouldMapOrderEntityToOrder() {
+        // given
         OrderEntity orderEntity = getOrderEntity(ORDER1_ID);
 
+        // when
         Order order = orderEntityMapper.toOrder(orderEntity);
 
+        // then
         checkOrder(order, ORDER1_ID);
     }
 
     @Test
     void toOrderList() {
+        // given
         OrderEntity orderEntity1 = getOrderEntity(ORDER1_ID);
         OrderEntity orderEntity2 = getOrderEntity(ORDER2_ID);
 
         List<OrderEntity> orderEntities = Arrays.asList(orderEntity1, orderEntity2);
 
+        // when
         List<Order> orders = orderEntityMapper.toOrderList(orderEntities);
 
+        // then
         assertEquals(orderEntities.size(), orders.size());
 
         checkOrder(orders.get(0), ORDER1_ID);

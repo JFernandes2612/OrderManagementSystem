@@ -31,10 +31,13 @@ class BookingMapperTests {
 
     @Test
     void shouldMapBookingToBookingEntity() {
+        // given
         Booking booking = getBooking();
 
+        // when
         BookingEntity bookingEntity = bookingMapper.toBookingEntity(booking);
 
+        // then
         assertEquals(BOOKING_ID, bookingEntity.getBookingId());
         assertEquals(BOOKING_CUSTOMER_CODE, bookingEntity.getCustomerCode());
         assertEquals(BOOKING_SUPPLIER_CODE, bookingEntity.getSupplierCode());

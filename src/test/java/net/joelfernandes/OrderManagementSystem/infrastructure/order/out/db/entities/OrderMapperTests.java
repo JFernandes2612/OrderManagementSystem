@@ -23,10 +23,13 @@ class OrderMapperTests {
 
     @Test
     void shouldMapFromOrderToOrderEntity() {
+        // given
         Order order = getOrder();
 
+        // when
         OrderEntity orderEntity = orderMapper.toOrderEntity(order);
 
+        // then
         assertEquals(ORDER_ID, orderEntity.getOrderId());
         assertEquals(ORDER_CUSTOMER_NAME, orderEntity.getCustomerName());
         assertEquals(ORDER_DATE, orderEntity.getOrderDate());

@@ -22,7 +22,7 @@ public class BookingService {
 
     public Optional<Booking> saveBooking(BookingDTO booking) {
         if (bookingRepository.findByBookingId(booking.getBookingId()).isPresent()) {
-            log.error("Booking with id '%s' already exists!".formatted(booking.getBookingId()));
+            log.error("Booking with id '{}' already exists!", booking.getBookingId());
             return Optional.empty();
         }
 
@@ -30,8 +30,9 @@ public class BookingService {
 
         if (order.isEmpty()) {
             log.error(
-                    "Order '%s' to create booking with id '%s' does not exists!"
-                            .formatted(booking.getOrderId(), booking.getBookingId()));
+                    "Order '{}' to create booking with id '{}' does not exists!",
+                    booking.getOrderId(),
+                    booking.getBookingId());
             return Optional.empty();
         }
 
@@ -40,10 +41,9 @@ public class BookingService {
 
         if (bookingWithSameOrderId.isPresent()) {
             log.error(
-                    "Order '%s' is already assigned to booking with id '%s'!"
-                            .formatted(
-                                    bookingWithSameOrderId.get().getOrder().getOrderId(),
-                                    bookingWithSameOrderId.get().getBookingId()));
+                    "Order '{}' is already assigned to booking with id '{}'!",
+                    bookingWithSameOrderId.get().getOrder().getOrderId(),
+                    bookingWithSameOrderId.get().getBookingId());
             return Optional.empty();
         }
 

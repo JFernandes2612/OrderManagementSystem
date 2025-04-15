@@ -23,10 +23,13 @@ class OrderInputMapperTests {
 
     @Test
     void shouldMapFromOrderInputToOrder() {
+        // given
         OrderInput orderInput = getOrderInput();
 
+        // when
         Order order = orderInputMapper.toOrder(orderInput);
 
+        // then
         assertEquals(ORDER_ID, order.getOrderId());
         assertEquals(ORDER_CUSTOMER_NAME, order.getCustomerName());
         assertEquals(ORDER_DATE, order.getOrderDate());
