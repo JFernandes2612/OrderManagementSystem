@@ -24,7 +24,7 @@ class BookingMapperTests {
     private static final float ORDER_LINE_PRICE = 2.0f;
 
     private static final String ORDER_ID = "orderId";
-    private static final String CUSTOMER_NAME = "customerName";
+    private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
     private final BookingMapper bookingMapper = BookingMapper.INSTANCE;
@@ -45,7 +45,7 @@ class BookingMapperTests {
 
         OrderEntity orderEntity = bookingEntity.getOrder();
         assertEquals(ORDER_ID, orderEntity.getOrderId());
-        assertEquals(CUSTOMER_NAME, orderEntity.getCustomerName());
+        assertEquals(ORDER_CUSTOMER_NAME, orderEntity.getCustomerName());
         assertEquals(ORDER_DATE, orderEntity.getOrderDate());
 
         assertEquals(booking.getOrder().getOrderLines().size(), orderEntity.getOrderLines().size());
@@ -79,7 +79,7 @@ class BookingMapperTests {
                 Order.builder()
                         .orderId(ORDER_ID)
                         .orderDate(ORDER_DATE)
-                        .customerName(CUSTOMER_NAME)
+                        .customerName(ORDER_CUSTOMER_NAME)
                         .orderLines(List.of(orderLine1, orderLine2))
                         .build();
 

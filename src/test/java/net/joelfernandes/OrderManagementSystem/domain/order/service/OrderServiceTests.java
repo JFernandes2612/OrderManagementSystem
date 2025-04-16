@@ -3,6 +3,9 @@ package net.joelfernandes.OrderManagementSystem.domain.order.service;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ch.qos.logback.classic.Logger;
@@ -17,6 +20,8 @@ import net.joelfernandes.OrderManagementSystem.domain.order.repository.OrderRepo
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
@@ -32,9 +37,11 @@ public class OrderServiceTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    private OrderService orderService;
-
     @Mock private OrderRepository orderRepository;
+
+    @Captor private ArgumentCaptor<Order> orderCaptor;
+
+    private OrderService orderService;
 
     @BeforeEach
     public void setUp() {
@@ -42,7 +49,23 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void shouldReturnEmptyOptionalWhenOrderAlreadyExists() {
+    public void shouldSaveOrderWhenOrderDoesNotExistYet() {
+        // given
+        Order order = getOrder();
+
+        when(orderRepository.findOrderById(ORDER_ID)).thenReturn(Optional.empty());
+
+        // when
+        orderService.saveOrder(order);
+
+        // then
+        verify(orderRepository).saveOrder(orderCaptor.capture());
+        Order orderSaved = orderCaptor.getValue();
+        verifyOrder(orderSaved, order);
+    }
+
+    @Test
+    public void shouldNotSaveOrderWhenOrderAlreadyExists() {
         // given
         ListAppender<ILoggingEvent> appender = new ListAppender<>();
         appender.start();
@@ -53,10 +76,10 @@ public class OrderServiceTests {
         when(orderRepository.findOrderById(ORDER_ID)).thenReturn(Optional.of(order));
 
         // when
-        Optional<Order> orderSaved = orderService.saveOrder(order);
+        orderService.saveOrder(order);
 
         // then
-        assertTrue(orderSaved.isEmpty());
+        verify(orderRepository, never()).saveOrder(any());
         assertTrue(
                 appender.list.stream()
                         .anyMatch(
@@ -69,20 +92,21 @@ public class OrderServiceTests {
         appender.stop();
     }
 
-    @Test
-    public void shouldReturnSavedOrderWhenOrderDoesNotExistYet() {
-        // given
-        Order order = getOrder();
+    private void verifyOrder(Order expectedOrder, Order actualOrder) {
+        assertEquals(expectedOrder.getOrderId(), actualOrder.getOrderId());
+        assertEquals(expectedOrder.getCustomerName(), actualOrder.getCustomerName());
+        assertEquals(expectedOrder.getOrderDate(), actualOrder.getOrderDate());
+        assertEquals(expectedOrder.getOrderLines().size(), actualOrder.getOrderLines().size());
+        for (int i = 0; i < expectedOrder.getOrderLines().size(); i++) {
+            verifyOrderLine(
+                    expectedOrder.getOrderLines().get(i), actualOrder.getOrderLines().get(i));
+        }
+    }
 
-        when(orderRepository.findOrderById(ORDER_ID)).thenReturn(Optional.empty());
-        when(orderRepository.saveOrder(order)).thenReturn(Optional.of(order));
-
-        // when
-        Optional<Order> orderSaved = orderService.saveOrder(order);
-
-        // then
-        assertTrue(orderSaved.isPresent());
-        assertEquals(orderSaved.get(), order);
+    private void verifyOrderLine(OrderLine expectedOrderLine, OrderLine actualOrderLine) {
+        assertEquals(expectedOrderLine.getPrice(), actualOrderLine.getPrice());
+        assertEquals(expectedOrderLine.getQuantity(), actualOrderLine.getQuantity());
+        assertEquals(expectedOrderLine.getProductId(), actualOrderLine.getProductId());
     }
 
     private static Order getOrder() {
