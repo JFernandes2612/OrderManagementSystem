@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class GetOrderUseCase {
+public class GetOrdersUseCase {
     private final OrderService orderService;
 
     public List<Order> getAllOrders() {
