@@ -6,6 +6,7 @@ import net.joelfernandes.OrderManagementSystem.application.order.in.GetOrdersUse
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,7 +16,7 @@ public class OrderController {
     private final GetOrdersUseCase getOrdersUseCase;
 
     @GetMapping()
-    public List<Order> getAllOrders() {
+    public @ResponseBody List<Order> getAllOrders() {
         return getOrdersUseCase.getAllOrders();
     }
 }

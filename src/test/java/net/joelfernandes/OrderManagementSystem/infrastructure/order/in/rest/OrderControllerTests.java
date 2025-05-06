@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.application.order.in.GetOrdersUseCase;
@@ -37,7 +38,23 @@ class OrderControllerTests {
     @MockitoBean private GetOrdersUseCase getOrdersUseCase;
 
     @Test
-    void shouldGetAllOrders() throws Exception {
+    void shouldGetEmptyListWhenNoOrdersExist() throws Exception {
+        // given
+        when(getOrdersUseCase.getAllOrders()).thenReturn(Collections.emptyList());
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/order"));
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[]"));
+        verify(getOrdersUseCase, times(1)).getAllOrders();
+    }
+
+    @Test
+    void shouldGetListWithOrdersWhenOrdersExist() throws Exception {
         // given
         Order order = getOrder();
         List<Order> ordersReturning = List.of(order);
