@@ -34,7 +34,7 @@ public class BookingController {
     public @ResponseBody ResponseEntity<Booking> saveBooking(
             @Valid @RequestBody BookingInput bookingInput) {
         return saveBookingUseCase
-                .receiveBooking(bookingInput)
+                .saveBooking(bookingInput)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }

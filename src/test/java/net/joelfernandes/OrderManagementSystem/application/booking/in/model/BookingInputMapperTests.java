@@ -1,6 +1,7 @@
 package net.joelfernandes.OrderManagementSystem.application.booking.in.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.dto.BookingDTO;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ class BookingInputMapperTests {
     private final BookingInputMapper bookingInputMapper = BookingInputMapper.INSTANCE;
 
     @Test
-    void shouldMapFromBookingInputToBookingDTO() {
+    public void shouldMapFromBookingInputToBookingDTO() {
         // given
         BookingInput bookingInput =
                 BookingInput.builder()
@@ -36,5 +37,14 @@ class BookingInputMapperTests {
         assertEquals(BOOKING_SUPPLIER_CODE, bookingDTO.getSupplierCode());
         assertEquals(BOOKING_FACTORY_CODE, bookingDTO.getFactoryCode());
         assertEquals(BOOKING_ORDER_ID, bookingDTO.getOrderId());
+    }
+
+    @Test
+    public void shouldMapFromNullBookingInputToNullBookingDTO() {
+        // when
+        BookingDTO bookingDTO = bookingInputMapper.toBookingDTO(null);
+
+        // then
+        assertNull(bookingDTO);
     }
 }

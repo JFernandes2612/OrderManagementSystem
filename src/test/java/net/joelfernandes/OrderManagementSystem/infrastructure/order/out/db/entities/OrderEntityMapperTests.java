@@ -24,7 +24,7 @@ class OrderEntityMapperTests {
     private final OrderEntityMapper orderEntityMapper = OrderEntityMapper.INSTANCE;
 
     @Test
-    void shouldMapOrderEntityToOrder() {
+    public void shouldMapOrderEntityToOrder() {
         // given
         OrderEntity orderEntity = getOrderEntity(ORDER1_ID);
 
@@ -36,7 +36,7 @@ class OrderEntityMapperTests {
     }
 
     @Test
-    void toOrderList() {
+    public void toOrderList() {
         // given
         OrderEntity orderEntity1 = getOrderEntity(ORDER1_ID);
         OrderEntity orderEntity2 = getOrderEntity(ORDER2_ID);

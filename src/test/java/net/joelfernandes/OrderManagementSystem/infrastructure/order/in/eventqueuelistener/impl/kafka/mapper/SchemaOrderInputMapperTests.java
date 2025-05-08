@@ -33,7 +33,7 @@ class SchemaOrderInputMapperTests {
     private final SchemaOrderInputMapper schemaOrderInputMapper = SchemaOrderInputMapper.INSTANCE;
 
     @Test
-    void shouldMapSchemaOrderInputToOrderInput() {
+    public void shouldMapSchemaOrderInputToOrderInput() {
         // given
         net.joelfernandes.OrderManagementSystem.avro.OrderInput schemaOrderInput =
                 getSchemaOrderInput();

@@ -15,7 +15,16 @@ class BookingDTOMapperTests {
     private final BookingDTOMapper bookingDTOMapper = BookingDTOMapper.INSTANCE;
 
     @Test
-    void shouldMapFromBookingDTOToBooking() {
+    public void shouldMapToNullWhenBookingDTOIsNull() {
+        // when
+        Booking booking = bookingDTOMapper.toBooking(null);
+
+        // then
+        assertNull(booking);
+    }
+
+    @Test
+    public void shouldMapFromBookingDTOToBooking() {
         // given
         BookingDTO bookingDTO =
                 BookingDTO.builder()

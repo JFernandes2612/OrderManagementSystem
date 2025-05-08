@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class SaveBookingUseCase {
     private final BookingService bookingService;
 
-    public Optional<Booking> receiveBooking(BookingInput booking) {
+    public Optional<Booking> saveBooking(BookingInput booking) {
         return bookingService.saveBooking(BookingInputMapper.INSTANCE.toBookingDTO(booking));
     }
 }

@@ -17,11 +17,11 @@ import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
 import net.joelfernandes.OrderManagementSystem.domain.order.repository.OrderRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
@@ -41,12 +41,7 @@ public class OrderServiceTests {
 
     @Captor private ArgumentCaptor<Order> orderCaptor;
 
-    private OrderService orderService;
-
-    @BeforeEach
-    public void setUp() {
-        orderService = new OrderService(orderRepository);
-    }
+    @InjectMocks private OrderService orderService;
 
     @Test
     public void shouldSaveOrderWhenOrderDoesNotExistYet() {
@@ -90,6 +85,22 @@ public class OrderServiceTests {
                                                                 "Order with id '%s' already exists!",
                                                                 ORDER_ID))));
         appender.stop();
+    }
+
+    @Test
+    public void shouldGetAllOrders() {
+        // given
+        Order order1 = getOrder();
+        Order order2 = getOrder();
+        when(orderRepository.findAllOrders()).thenReturn(List.of(order1, order2));
+
+        // when
+        List<Order> orders = orderService.getAllOrders();
+
+        // then
+        assertEquals(2, orders.size());
+        verifyOrder(orders.get(0), order1);
+        verifyOrder(orders.get(1), order2);
     }
 
     private void verifyOrder(Order expectedOrder, Order actualOrder) {

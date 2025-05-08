@@ -38,7 +38,7 @@ class OrderControllerTests {
     @MockitoBean private GetOrdersUseCase getOrdersUseCase;
 
     @Test
-    void shouldGetEmptyListWhenNoOrdersExist() throws Exception {
+    public void shouldGetEmptyListWhenNoOrdersExist() throws Exception {
         // given
         when(getOrdersUseCase.getAllOrders()).thenReturn(Collections.emptyList());
 
@@ -54,7 +54,7 @@ class OrderControllerTests {
     }
 
     @Test
-    void shouldGetListWithOrdersWhenOrdersExist() throws Exception {
+    public void shouldGetListWithOrdersWhenOrdersExist() throws Exception {
         // given
         Order order = getOrder();
         List<Order> ordersReturning = List.of(order);

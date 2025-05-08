@@ -51,7 +51,7 @@ class BookingControllerTests {
     @MockitoBean private SaveBookingUseCase saveBookingUseCase;
 
     @Test
-    void shouldReturnEmptyListWhenNoBookingsExist() throws Exception {
+    public void shouldReturnEmptyListWhenNoBookingsExist() throws Exception {
         // given
         when(getBookingsUseCase.getAllBookings()).thenReturn(List.of());
 
@@ -67,7 +67,7 @@ class BookingControllerTests {
     }
 
     @Test
-    void shouldReturnListWithBookingsWhenBookingsExist() throws Exception {
+    public void shouldReturnListWithBookingsWhenBookingsExist() throws Exception {
         // given
         Booking booking = getBooking();
         List<Booking> bookingsReturning = List.of(booking);
@@ -87,10 +87,10 @@ class BookingControllerTests {
     }
 
     @Test
-    void shouldReturnBookingWhenSavingBookingSucceeds() throws Exception {
+    public void shouldReturnBookingWhenSavingBookingSucceeds() throws Exception {
         // given
         Booking booking = getBooking();
-        when(saveBookingUseCase.receiveBooking(any(BookingInput.class)))
+        when(saveBookingUseCase.saveBooking(any(BookingInput.class)))
                 .thenReturn(Optional.of(booking));
 
         BookingInput bookingInput = getBookingInput();
@@ -111,14 +111,13 @@ class BookingControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(bookingJson));
-        verify(saveBookingUseCase, times(1)).receiveBooking(any(BookingInput.class));
+        verify(saveBookingUseCase, times(1)).saveBooking(any(BookingInput.class));
     }
 
     @Test
-    void shouldReturnBadRequestWhenSavingBookingFails() throws Exception {
+    public void shouldReturnBadRequestWhenSavingBookingFails() throws Exception {
         // given
-        when(saveBookingUseCase.receiveBooking(any(BookingInput.class)))
-                .thenReturn(Optional.empty());
+        when(saveBookingUseCase.saveBooking(any(BookingInput.class))).thenReturn(Optional.empty());
 
         BookingInput bookingInput = getBookingInput();
 
@@ -134,11 +133,11 @@ class BookingControllerTests {
 
         // then
         resultActions.andExpect(status().isBadRequest());
-        verify(saveBookingUseCase, times(1)).receiveBooking(any(BookingInput.class));
+        verify(saveBookingUseCase, times(1)).saveBooking(any(BookingInput.class));
     }
 
     @Test
-    void shouldReturnBadRequestWhenSavingBookingWithInvalidInput() throws Exception {
+    public void shouldReturnBadRequestWhenSavingBookingWithInvalidInput() throws Exception {
         // given
         BookingInput bookingInput = BookingInput.builder().build();
 
@@ -154,7 +153,7 @@ class BookingControllerTests {
 
         // then
         resultActions.andExpect(status().isBadRequest());
-        verify(saveBookingUseCase, never()).receiveBooking(any(BookingInput.class));
+        verify(saveBookingUseCase, never()).saveBooking(any(BookingInput.class));
     }
 
     private static BookingInput getBookingInput() {

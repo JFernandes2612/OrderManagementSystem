@@ -20,11 +20,11 @@ import net.joelfernandes.OrderManagementSystem.domain.booking.repository.Booking
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
 import net.joelfernandes.OrderManagementSystem.domain.order.repository.OrderRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
@@ -51,12 +51,7 @@ public class BookingServiceTests {
 
     @Captor private ArgumentCaptor<Booking> bookingCaptor;
 
-    private BookingService bookingService;
-
-    @BeforeEach
-    public void setUp() {
-        bookingService = new BookingService(bookingRepository, orderRepository);
-    }
+    @InjectMocks private BookingService bookingService;
 
     @Test
     public void
@@ -167,6 +162,25 @@ public class BookingServiceTests {
                                                         format(
                                                                 "Order '%s' is already assigned to booking with id '%s'!",
                                                                 ORDER_ID, BOOKING_ID))));
+    }
+
+    @Test
+    public void shouldGetAllBookings() {
+        // given
+        Booking booking1 = getBooking(getOrder());
+        Booking booking2 = getBooking(getOrder());
+        List<Booking> bookings = List.of(booking1, booking2);
+
+        when(bookingRepository.findAllBookings()).thenReturn(bookings);
+
+        // when
+        List<Booking> actualBookings = bookingService.getAllBookings();
+
+        // then
+        assertEquals(bookings.size(), actualBookings.size());
+        for (int i = 0; i < bookings.size(); i++) {
+            verifyBooking(bookings.get(i), actualBookings.get(i));
+        }
     }
 
     private void verifyBooking(Booking expectedBooking, Booking actualBooking) {

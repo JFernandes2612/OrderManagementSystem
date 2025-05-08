@@ -22,7 +22,7 @@ class OrderInputMapperTests {
     private final OrderInputMapper orderInputMapper = OrderInputMapper.INSTANCE;
 
     @Test
-    void shouldMapFromOrderInputToOrder() {
+    public void shouldMapFromOrderInputToOrder() {
         // given
         OrderInput orderInput = getOrderInput();
 

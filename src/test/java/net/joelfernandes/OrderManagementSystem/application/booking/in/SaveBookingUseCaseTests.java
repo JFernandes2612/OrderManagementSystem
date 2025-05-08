@@ -1,18 +1,26 @@
-package net.joelfernandes.OrderManagementSystem.infrastructure.booking.out.db.entities;
+package net.joelfernandes.OrderManagementSystem.application.booking.in;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import net.joelfernandes.OrderManagementSystem.application.booking.in.model.BookingInput;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
+import net.joelfernandes.OrderManagementSystem.domain.booking.model.dto.BookingDTO;
+import net.joelfernandes.OrderManagementSystem.domain.booking.service.BookingService;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
-import net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities.OrderEntity;
-import net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities.OrderLineEntity;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-class BookingMapperTests {
-
+@ExtendWith(MockitoExtension.class)
+class SaveBookingUseCaseTests {
     private static final String BOOKING_ID = "bookingId";
     private static final String BOOKING_CUSTOMER_CODE = "customerCode";
     private static final String BOOKING_SUPPLIER_CODE = "supplierCode";
@@ -27,38 +35,49 @@ class BookingMapperTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    private final BookingMapper bookingMapper = BookingMapper.INSTANCE;
+    @Mock private BookingService bookingService;
+
+    @InjectMocks private SaveBookingUseCase saveBookingUseCase;
 
     @Test
-    public void shouldMapBookingToBookingEntity() {
+    public void shouldReturnOptionalWithBookingWhenBookingIsSaved() {
         // given
+        BookingInput bookingInput = getBookingInput();
         Booking booking = getBooking();
 
+        when(bookingService.saveBooking(any(BookingDTO.class)))
+                .thenReturn(Optional.ofNullable(booking));
+
         // when
-        BookingEntity bookingEntity = bookingMapper.toBookingEntity(booking);
+        Optional<Booking> savedBooking = saveBookingUseCase.saveBooking(bookingInput);
 
         // then
-        assertEquals(BOOKING_ID, bookingEntity.getBookingId());
-        assertEquals(BOOKING_CUSTOMER_CODE, bookingEntity.getCustomerCode());
-        assertEquals(BOOKING_SUPPLIER_CODE, bookingEntity.getSupplierCode());
-        assertEquals(BOOKING_FACTORY_CODE, bookingEntity.getFactoryCode());
+        assertTrue(savedBooking.isPresent());
+        assertEquals(booking, savedBooking.get());
+    }
 
-        OrderEntity orderEntity = bookingEntity.getOrder();
-        assertEquals(ORDER_ID, orderEntity.getOrderId());
-        assertEquals(ORDER_CUSTOMER_NAME, orderEntity.getCustomerName());
-        assertEquals(ORDER_DATE, orderEntity.getOrderDate());
+    @Test
+    public void shouldReturnEmptyOptionalWhenBookingIsNotSaved() {
+        // given
+        BookingInput bookingInput = getBookingInput();
 
-        assertEquals(booking.getOrder().getOrderLines().size(), orderEntity.getOrderLines().size());
+        when(bookingService.saveBooking(any(BookingDTO.class))).thenReturn(Optional.empty());
 
-        OrderLineEntity firstOrderLineEntity = orderEntity.getOrderLines().getFirst();
-        assertEquals(ORDER_LINE_PRODUCT1_ID, firstOrderLineEntity.getProductId());
-        assertEquals(ORDER_LINE_QUANTITY, firstOrderLineEntity.getQuantity());
-        assertEquals(ORDER_LINE_PRICE, firstOrderLineEntity.getPrice());
+        // when
+        Optional<Booking> savedBooking = saveBookingUseCase.saveBooking(bookingInput);
 
-        OrderLineEntity secondOrderLineEntity = orderEntity.getOrderLines().getLast();
-        assertEquals(ORDER_LINE_PRODUCT2_ID, secondOrderLineEntity.getProductId());
-        assertEquals(ORDER_LINE_QUANTITY, secondOrderLineEntity.getQuantity());
-        assertEquals(ORDER_LINE_PRICE, secondOrderLineEntity.getPrice());
+        // then
+        assertTrue(savedBooking.isEmpty());
+    }
+
+    private static BookingInput getBookingInput() {
+        return BookingInput.builder()
+                .bookingId(BOOKING_ID)
+                .customerCode(BOOKING_CUSTOMER_CODE)
+                .supplierCode(BOOKING_SUPPLIER_CODE)
+                .factoryCode(BOOKING_FACTORY_CODE)
+                .orderId(ORDER_ID)
+                .build();
     }
 
     private static Booking getBooking() {

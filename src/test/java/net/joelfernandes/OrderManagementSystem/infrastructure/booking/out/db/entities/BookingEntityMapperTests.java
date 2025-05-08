@@ -32,7 +32,7 @@ class BookingEntityMapperTests {
     private final BookingEntityMapper bookingEntityMapper = BookingEntityMapper.INSTANCE;
 
     @Test
-    void shouldMapBookingEntityToBooking() {
+    public void shouldMapBookingEntityToBooking() {
         // given
         BookingEntity bookingEntity = getBookingEntity(BOOKING1_ID);
 
@@ -44,7 +44,7 @@ class BookingEntityMapperTests {
     }
 
     @Test
-    void shouldMapBookingEntityListToBookingList() {
+    public void shouldMapBookingEntityListToBookingList() {
         // given
         BookingEntity firstBookingEntity = getBookingEntity(BOOKING1_ID);
         BookingEntity secondBookingEntity = getBookingEntity(BOOKING2_ID);
