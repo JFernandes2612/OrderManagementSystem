@@ -1,7 +1,9 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.booking.out.db.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
@@ -61,6 +63,55 @@ class BookingMapperTests {
         assertEquals(ORDER_LINE_PRICE, secondOrderLineEntity.getPrice());
     }
 
+    @Test
+    public void shouldMapNullBookingToNullBookingEntity() {
+        // given + when
+        BookingEntity bookingEntity = bookingMapper.toBookingEntity(null);
+
+        // then
+        assertNull(bookingEntity);
+    }
+
+    @Test
+    public void shouldMapNullOrderOfBookingToNullOrderEntityOfBookingEntity() {
+        // given
+        Booking booking = Booking.builder().build();
+
+        // when
+        BookingEntity bookingEntity = bookingMapper.toBookingEntity(booking);
+
+        // then
+        assertNull(bookingEntity.getOrder());
+    }
+
+    @Test
+    public void shouldMapNullOrderLineOfBookingToNullOrderLineEntityOfBookingEntity() {
+        // given
+        Order order = Order.builder().build();
+        Booking booking = Booking.builder().order(order).build();
+
+        // when
+        BookingEntity bookingEntity = bookingMapper.toBookingEntity(booking);
+
+        // then
+        assertNull(bookingEntity.getOrder().getOrderLines());
+    }
+
+    @Test
+    public void shouldMapNullOrderLineInListOfBookingToNullOrderLineEntityInListOfBookingEntity() {
+        // given
+        List<OrderLine> orderLines = new ArrayList<>();
+        orderLines.add(null);
+        Order order = Order.builder().orderLines(orderLines).build();
+        Booking booking = Booking.builder().order(order).build();
+
+        // when
+        BookingEntity bookingEntity = bookingMapper.toBookingEntity(booking);
+
+        // then
+        assertNull(bookingEntity.getOrder().getOrderLines().getFirst());
+    }
+
     private static Booking getBooking() {
         OrderLine orderLine1 =
                 OrderLine.builder()
@@ -70,6 +121,7 @@ class BookingMapperTests {
                         .build();
         OrderLine orderLine2 =
                 OrderLine.builder()
+                        .id(0L)
                         .quantity(ORDER_LINE_QUANTITY)
                         .price(ORDER_LINE_PRICE)
                         .productId(ORDER_LINE_PRODUCT2_ID)

@@ -1,11 +1,15 @@
 package net.joelfernandes.OrderManagementSystem.application.order.in.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
+import org.apache.avro.generic.GenericData;
 import org.junit.jupiter.api.Test;
 
 class OrderInputMapperTests {
@@ -45,6 +49,48 @@ class OrderInputMapperTests {
         assertEquals(ORDER_LINE_QUANTITY, secondOrderLine.getQuantity());
         assertEquals(ORDER_LINE_PRICE, secondOrderLine.getPrice());
     }
+
+    @Test
+    void shouldMapToNullOrderIfInputIsNull() {
+        // given + when
+        Order order = orderInputMapper.toOrder(null);
+
+        // then
+        assertNull(order);
+    }
+
+    @Test
+    void shouldMapToNullOrderLinesIfOrderLinesInputIsNull() {
+        // given
+        OrderInput orderInput = OrderInput.builder()
+                .orderLines(null)
+                .build();
+
+        // when
+        Order order = orderInputMapper.toOrder(orderInput);
+
+        // then
+        assertNotNull(order);
+        assertNull(order.getOrderLines());
+    }
+
+    @Test
+    void shouldMapToNullOrderLineIfOrderLineInListInputIsNull() {
+        // given
+        List<OrderLineInput> orderLineInputs = new ArrayList<>();
+        orderLineInputs.add(null);
+        OrderInput orderInput = OrderInput.builder()
+                .orderLines(orderLineInputs)
+                .build();
+
+        // when
+        Order order = orderInputMapper.toOrder(orderInput);
+
+        // then
+        assertNotNull(order);
+        assertNull(order.getOrderLines().getFirst());
+    }
+
 
     private static OrderInput getOrderInput() {
         OrderLineInput orderLineInput1 =

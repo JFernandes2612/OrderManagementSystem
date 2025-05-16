@@ -1,7 +1,10 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.booking.out.db.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +47,73 @@ class BookingEntityMapperTests {
     }
 
     @Test
+    public void shouldMapNullBookingEntityToNullBooking() {
+        // given + when
+        Booking booking = bookingEntityMapper.toBooking(null);
+
+        // then
+        assertNull(booking);
+    }
+
+    @Test
+    public void shouldMapNullOrderEntityOfBookingToNullOrderOfBooking() {
+        // given
+        BookingEntity bookingEntity = BookingEntity.builder()
+                .order(null)
+                .build();
+
+        // given
+        Booking booking = bookingEntityMapper.toBooking(bookingEntity);
+
+        // then
+        assertNotNull(booking);
+        assertNull(booking.getOrder());
+    }
+
+    @Test
+    public void shouldMapNullOrderLineEntityListOfBookingToNullOrderLineListOfBooking() {
+        // given
+        OrderEntity orderEntity = OrderEntity.builder()
+                .orderLines(null)
+                .build();
+
+        BookingEntity bookingEntity = BookingEntity.builder()
+                .order(orderEntity)
+                .build();
+
+        // when
+        Booking booking = bookingEntityMapper.toBooking(bookingEntity);
+
+        // then
+        assertNotNull(booking);
+        assertNotNull(booking.getOrder());
+        assertNull(booking.getOrder().getOrderLines());
+    }
+
+    @Test
+    public void shouldMapNullOrderLineEntityInListOfBookingToNullOrderLineInList() {
+        // given
+        List<OrderLineEntity> orderLineEntities = new ArrayList<>();
+        orderLineEntities.add(null);
+        OrderEntity orderEntity = OrderEntity.builder()
+                .orderLines(orderLineEntities)
+                .build();
+
+        BookingEntity bookingEntity = BookingEntity.builder()
+                .order(orderEntity)
+                .build();
+
+        // when
+        Booking booking = bookingEntityMapper.toBooking(bookingEntity);
+
+        // then
+        assertNotNull(booking);
+        assertNotNull(booking.getOrder());
+        assertEquals(1, booking.getOrder().getOrderLines().size());
+        assertNull(booking.getOrder().getOrderLines().getLast());
+    }
+
+    @Test
     public void shouldMapBookingEntityListToBookingList() {
         // given
         BookingEntity firstBookingEntity = getBookingEntity(BOOKING1_ID);
@@ -60,6 +130,15 @@ class BookingEntityMapperTests {
 
         checkBooking(bookings.get(0), BOOKING1_ID);
         checkBooking(bookings.get(1), BOOKING2_ID);
+    }
+
+    @Test
+    public void shouldMapNullBookingEntityListToNullBooking() {
+        // given + when
+        List<Booking> bookings = bookingEntityMapper.toBookingList(null);
+
+        // then
+        assertNull(bookings);
     }
 
     private void checkBooking(Booking booking, String bookingId) {
