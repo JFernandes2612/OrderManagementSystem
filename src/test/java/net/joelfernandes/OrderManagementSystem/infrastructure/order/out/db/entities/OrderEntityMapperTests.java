@@ -21,7 +21,7 @@ class OrderEntityMapperTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    private final OrderEntityMapper orderEntityMapper = OrderEntityMapper.INSTANCE;
+    private final OrderEntityMapper orderEntityMapper = new OrderEntityMapperImpl();
 
     @Test
     public void shouldMapOrderEntityToOrder() {

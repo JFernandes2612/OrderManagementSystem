@@ -32,7 +32,7 @@ class BookingEntityMapperTests {
     private static final String CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    private final BookingEntityMapper bookingEntityMapper = BookingEntityMapper.INSTANCE;
+    private final BookingEntityMapper bookingEntityMapper = new BookingEntityMapperImpl();
 
     @Test
     public void shouldMapBookingEntityToBooking() {
@@ -58,9 +58,7 @@ class BookingEntityMapperTests {
     @Test
     public void shouldMapNullOrderEntityOfBookingToNullOrderOfBooking() {
         // given
-        BookingEntity bookingEntity = BookingEntity.builder()
-                .order(null)
-                .build();
+        BookingEntity bookingEntity = BookingEntity.builder().order(null).build();
 
         // given
         Booking booking = bookingEntityMapper.toBooking(bookingEntity);
@@ -73,13 +71,9 @@ class BookingEntityMapperTests {
     @Test
     public void shouldMapNullOrderLineEntityListOfBookingToNullOrderLineListOfBooking() {
         // given
-        OrderEntity orderEntity = OrderEntity.builder()
-                .orderLines(null)
-                .build();
+        OrderEntity orderEntity = OrderEntity.builder().orderLines(null).build();
 
-        BookingEntity bookingEntity = BookingEntity.builder()
-                .order(orderEntity)
-                .build();
+        BookingEntity bookingEntity = BookingEntity.builder().order(orderEntity).build();
 
         // when
         Booking booking = bookingEntityMapper.toBooking(bookingEntity);
@@ -95,13 +89,9 @@ class BookingEntityMapperTests {
         // given
         List<OrderLineEntity> orderLineEntities = new ArrayList<>();
         orderLineEntities.add(null);
-        OrderEntity orderEntity = OrderEntity.builder()
-                .orderLines(orderLineEntities)
-                .build();
+        OrderEntity orderEntity = OrderEntity.builder().orderLines(orderLineEntities).build();
 
-        BookingEntity bookingEntity = BookingEntity.builder()
-                .order(orderEntity)
-                .build();
+        BookingEntity bookingEntity = BookingEntity.builder().order(orderEntity).build();
 
         // when
         Booking booking = bookingEntityMapper.toBooking(bookingEntity);

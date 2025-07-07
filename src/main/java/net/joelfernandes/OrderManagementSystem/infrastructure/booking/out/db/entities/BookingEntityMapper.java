@@ -2,13 +2,11 @@ package net.joelfernandes.OrderManagementSystem.infrastructure.booking.out.db.en
 
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-@Mapper()
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface BookingEntityMapper {
-    BookingEntityMapper INSTANCE = Mappers.getMapper(BookingEntityMapper.class);
-
     Booking toBooking(BookingEntity bookingEntity);
 
     List<Booking> toBookingList(List<BookingEntity> bookingEntities);

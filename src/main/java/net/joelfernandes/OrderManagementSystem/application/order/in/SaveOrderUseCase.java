@@ -1,7 +1,6 @@
 package net.joelfernandes.OrderManagementSystem.application.order.in;
 
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInput;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInputMapper;
@@ -13,8 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SaveOrderUseCase {
     private final OrderService orderService;
+    private final OrderInputMapper orderInputMapper;
 
     public Optional<Order> receiveOrder(OrderInput order) {
-        return orderService.saveOrder(OrderInputMapper.INSTANCE.toOrder(order));
+        return orderService.saveOrder(orderInputMapper.toOrder(order));
     }
 }

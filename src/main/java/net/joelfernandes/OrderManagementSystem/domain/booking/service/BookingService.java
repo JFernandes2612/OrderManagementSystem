@@ -19,6 +19,7 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final OrderRepository orderRepository;
+    private final BookingDTOMapper bookingDTOMapper;
 
     public Optional<Booking> saveBooking(BookingDTO booking) {
         if (bookingRepository.findByBookingId(booking.getBookingId()).isPresent()) {
@@ -47,7 +48,7 @@ public class BookingService {
             return Optional.empty();
         }
 
-        Booking bookingDomain = BookingDTOMapper.INSTANCE.toBooking(booking);
+        Booking bookingDomain = bookingDTOMapper.toBooking(booking);
         bookingDomain.setOrder(order.get());
         return bookingRepository.saveBooking(bookingDomain);
     }

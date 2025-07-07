@@ -29,7 +29,7 @@ class BookingMapperTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    private final BookingMapper bookingMapper = BookingMapper.INSTANCE;
+    private final BookingMapper bookingMapper = new BookingMapperImpl();
 
     @Test
     public void shouldMapBookingToBookingEntity() {

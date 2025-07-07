@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
-import org.apache.avro.generic.GenericData;
 import org.junit.jupiter.api.Test;
 
 class OrderInputMapperTests {
@@ -23,7 +22,7 @@ class OrderInputMapperTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    private final OrderInputMapper orderInputMapper = OrderInputMapper.INSTANCE;
+    private final OrderInputMapper orderInputMapper = new OrderInputMapperImpl();
 
     @Test
     public void shouldMapFromOrderInputToOrder() {
@@ -62,9 +61,7 @@ class OrderInputMapperTests {
     @Test
     void shouldMapToNullOrderLinesIfOrderLinesInputIsNull() {
         // given
-        OrderInput orderInput = OrderInput.builder()
-                .orderLines(null)
-                .build();
+        OrderInput orderInput = OrderInput.builder().orderLines(null).build();
 
         // when
         Order order = orderInputMapper.toOrder(orderInput);
@@ -79,9 +76,7 @@ class OrderInputMapperTests {
         // given
         List<OrderLineInput> orderLineInputs = new ArrayList<>();
         orderLineInputs.add(null);
-        OrderInput orderInput = OrderInput.builder()
-                .orderLines(orderLineInputs)
-                .build();
+        OrderInput orderInput = OrderInput.builder().orderLines(orderLineInputs).build();
 
         // when
         Order order = orderInputMapper.toOrder(orderInput);
@@ -90,7 +85,6 @@ class OrderInputMapperTests {
         assertNotNull(order);
         assertNull(order.getOrderLines().getFirst());
     }
-
 
     private static OrderInput getOrderInput() {
         OrderLineInput orderLineInput1 =

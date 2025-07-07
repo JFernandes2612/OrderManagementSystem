@@ -17,11 +17,11 @@ import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
 import net.joelfernandes.OrderManagementSystem.domain.order.repository.OrderRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,12 @@ public class OrderServiceTests {
 
     @Captor private ArgumentCaptor<Order> orderCaptor;
 
-    @InjectMocks private OrderService orderService;
+    private OrderService orderService;
+
+    @BeforeEach
+    void setUp() {
+        orderService = new OrderService(orderRepository);
+    }
 
     @Test
     public void shouldSaveOrderWhenOrderDoesNotExistYet() {

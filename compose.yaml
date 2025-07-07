@@ -9,14 +9,6 @@ services:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=password
 
-#  oracledb:
-#    image: container-registry.oracle.com/database/free:latest
-#    container_name: 'oracledb'
-#    ports:
-#      - "1521:1521"
-#    environment:
-#      - ORACLE_PWD=password
-
   zookeeper:
     image: confluentinc/cp-zookeeper:7.7.2
     hostname: zookeeper

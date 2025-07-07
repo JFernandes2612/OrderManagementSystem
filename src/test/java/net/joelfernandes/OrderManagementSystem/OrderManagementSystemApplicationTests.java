@@ -1,6 +1,8 @@
 package net.joelfernandes.OrderManagementSystem;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-class OrderManagementSystemApplicationTests {}
+@ActiveProfiles({"test"})
+public abstract class OrderManagementSystemApplicationTests {}

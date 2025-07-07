@@ -16,24 +16,25 @@ import org.springframework.stereotype.Component;
 @Transactional
 @Component
 public class OrderDBAdapter implements OrderRepository {
-    private final OrderJPARepository repository;
+    private final OrderJPARepository orderJPARepository;
+    private final OrderMapper orderMapper;
+    private final OrderEntityMapper orderEntityMapper;
 
     @Override
     public Optional<Order> saveOrder(Order order) {
-        OrderEntity orderEntity = OrderMapper.INSTANCE.toOrderEntity(order);
-        return Optional.ofNullable(
-                OrderEntityMapper.INSTANCE.toOrder(repository.save(orderEntity)));
+        OrderEntity orderEntity = orderMapper.toOrderEntity(order);
+        return Optional.ofNullable(orderEntityMapper.toOrder(orderJPARepository.save(orderEntity)));
     }
 
     @Override
     public Optional<Order> findOrderById(String orderId) {
-        Optional<OrderEntity> order = repository.findById(orderId);
-        return order.map(OrderEntityMapper.INSTANCE::toOrder);
+        Optional<OrderEntity> order = orderJPARepository.findById(orderId);
+        return order.map(orderEntityMapper::toOrder);
     }
 
     @Override
     public List<Order> findAllOrders() {
-        List<OrderEntity> orders = repository.findAll();
-        return OrderEntityMapper.INSTANCE.toOrderList(orders);
+        List<OrderEntity> orders = orderJPARepository.findAll();
+        return orderEntityMapper.toOrderList(orders);
     }
 }

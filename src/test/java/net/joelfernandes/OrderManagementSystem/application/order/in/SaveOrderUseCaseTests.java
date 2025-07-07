@@ -8,15 +8,15 @@ import static org.mockito.Mockito.when;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInput;
+import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInputMapper;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderLineInput;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
 import net.joelfernandes.OrderManagementSystem.domain.order.service.OrderService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -31,11 +31,15 @@ class SaveOrderUseCaseTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    @Mock
-    private OrderService orderService;
+    @Mock private OrderService orderService;
+    @Mock private OrderInputMapper orderInputMapper;
 
-    @InjectMocks
     private SaveOrderUseCase saveOrderUseCase;
+
+    @BeforeEach
+    void setUp() {
+        saveOrderUseCase = new SaveOrderUseCase(orderService, orderInputMapper);
+    }
 
     @Test
     void shouldReturnOptionalWithOrderWhenOrderIsSaved() {
@@ -43,8 +47,8 @@ class SaveOrderUseCaseTests {
         OrderInput orderInput = getOrderInput();
         Order order = getOrder();
 
-        when(orderService.saveOrder(any(Order.class)))
-                .thenReturn(Optional.ofNullable(order));
+        when(orderInputMapper.toOrder(orderInput)).thenReturn(order);
+        when(orderService.saveOrder(any(Order.class))).thenReturn(Optional.ofNullable(order));
 
         // when
         Optional<Order> savedOrder = saveOrderUseCase.receiveOrder(orderInput);
@@ -97,5 +101,4 @@ class SaveOrderUseCaseTests {
                 .orderLines(List.of(orderLine1, orderLine2))
                 .build();
     }
-
 }

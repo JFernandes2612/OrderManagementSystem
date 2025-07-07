@@ -12,7 +12,8 @@ class BookingDTOMapperTests {
     private static final String BOOKING_SUPPLIER_CODE = "supplierCode";
     private static final String BOOKING_FACTORY_CODE = "factoryCode";
     private static final String BOOKING_ORDER_ID = "orderId";
-    private final BookingDTOMapper bookingDTOMapper = BookingDTOMapper.INSTANCE;
+
+    private final BookingDTOMapper bookingDTOMapper = new BookingDTOMapperImpl();
 
     @Test
     public void shouldMapToNullWhenBookingDTOIsNull() {

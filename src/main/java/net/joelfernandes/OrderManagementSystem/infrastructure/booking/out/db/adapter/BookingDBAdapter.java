@@ -17,29 +17,31 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookingDBAdapter implements BookingRepository {
     private final BookingJPARepository bookingJPARepository;
+    private final BookingMapper bookingMapper;
+    private final BookingEntityMapper bookingEntityMapper;
 
     @Override
     public Optional<Booking> saveBooking(Booking booking) {
-        BookingEntity bookingEntity = BookingMapper.INSTANCE.toBookingEntity(booking);
+        BookingEntity bookingEntity = bookingMapper.toBookingEntity(booking);
         BookingEntity savedBooking = bookingJPARepository.save(bookingEntity);
-        return Optional.ofNullable(BookingEntityMapper.INSTANCE.toBooking(savedBooking));
+        return Optional.ofNullable(bookingEntityMapper.toBooking(savedBooking));
     }
 
     @Override
     public Optional<Booking> findByBookingId(String bookingId) {
         Optional<BookingEntity> bookingEntity = bookingJPARepository.findById(bookingId);
-        return bookingEntity.map(BookingEntityMapper.INSTANCE::toBooking);
+        return bookingEntity.map(bookingEntityMapper::toBooking);
     }
 
     @Override
     public Optional<Booking> findByOrderId(String orderId) {
         Optional<BookingEntity> bookingEntity = bookingJPARepository.findByOrder_OrderId(orderId);
-        return bookingEntity.map(BookingEntityMapper.INSTANCE::toBooking);
+        return bookingEntity.map(bookingEntityMapper::toBooking);
     }
 
     @Override
     public List<Booking> findAllBookings() {
         List<BookingEntity> bookingEntities = bookingJPARepository.findAll();
-        return BookingEntityMapper.INSTANCE.toBookingList(bookingEntities);
+        return bookingEntityMapper.toBookingList(bookingEntities);
     }
 }

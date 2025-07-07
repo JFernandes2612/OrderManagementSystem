@@ -1,6 +1,7 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventqueuelistener.impl.kafka;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.joelfernandes.OrderManagementSystem.application.order.in.SaveOrderUseCase;
 import net.joelfernandes.OrderManagementSystem.avro.OrderInput;
@@ -15,11 +16,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderKafkaListener implements OrderBasicListener<Message<OrderInput>> {
     private final SaveOrderUseCase saveOrderUseCase;
+    private final SchemaOrderInputMapper schemaOrderInputMapper;
 
+    @SneakyThrows
     @KafkaListener(topics = topic, containerFactory = "orderListenerContainerFactory")
     @Override
     public void receive(Message<OrderInput> in) {
-        saveOrderUseCase.receiveOrder(
-                SchemaOrderInputMapper.INSTANCE.toOrderInput(in.getPayload()));
+        saveOrderUseCase.receiveOrder(schemaOrderInputMapper.toOrderInput(in.getPayload()));
     }
 }

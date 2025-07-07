@@ -19,7 +19,7 @@ class OrderMapperTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    private final OrderMapper orderMapper = OrderMapper.INSTANCE;
+    private final OrderMapper orderMapper = new OrderMapperImpl();
 
     @Test
     public void shouldMapFromOrderToOrderEntity() {

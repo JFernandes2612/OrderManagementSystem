@@ -14,7 +14,7 @@ class BookingInputMapperTests {
     private static final String BOOKING_FACTORY_CODE = "factoryCode";
     private static final String BOOKING_ORDER_ID = "orderId";
 
-    private final BookingInputMapper bookingInputMapper = BookingInputMapper.INSTANCE;
+    private final BookingInputMapper bookingInputMapper = new BookingInputMapperImpl();
 
     @Test
     public void shouldMapFromBookingInputToBookingDTO() {

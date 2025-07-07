@@ -9,9 +9,9 @@ import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
 import net.joelfernandes.OrderManagementSystem.domain.booking.service.BookingService;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,7 +33,12 @@ class GetBookingsUseCaseTests {
 
     @Mock private BookingService bookingService;
 
-    @InjectMocks private GetBookingsUseCase getBookingsUseCase;
+    private GetBookingsUseCase getBookingsUseCase;
+
+    @BeforeEach
+    void setUp() {
+        this.getBookingsUseCase = new GetBookingsUseCase(bookingService);
+    }
 
     @Test
     public void shouldReturnAllBookings() {

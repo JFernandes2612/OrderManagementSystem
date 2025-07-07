@@ -16,15 +16,16 @@ import java.util.List;
 import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.dto.BookingDTO;
+import net.joelfernandes.OrderManagementSystem.domain.booking.model.dto.BookingDTOMapper;
 import net.joelfernandes.OrderManagementSystem.domain.booking.repository.BookingRepository;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
 import net.joelfernandes.OrderManagementSystem.domain.order.repository.OrderRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
@@ -46,12 +47,17 @@ public class BookingServiceTests {
     private static final Date ORDER_DATE = new Date();
 
     @Mock private BookingRepository bookingRepository;
-
     @Mock private OrderRepository orderRepository;
+    @Mock private BookingDTOMapper bookingDTOMapper;
 
     @Captor private ArgumentCaptor<Booking> bookingCaptor;
 
-    @InjectMocks private BookingService bookingService;
+    private BookingService bookingService;
+
+    @BeforeEach
+    void setUp() {
+        bookingService = new BookingService(bookingRepository, orderRepository, bookingDTOMapper);
+    }
 
     @Test
     public void
@@ -59,18 +65,19 @@ public class BookingServiceTests {
         // given
         BookingDTO bookingDTO = getBookingDTO();
         Order order = getOrder();
+        Booking booking = getBooking(order);
 
         when(bookingRepository.findByBookingId(BOOKING_ID)).thenReturn(Optional.empty());
         when(orderRepository.findOrderById(ORDER_ID)).thenReturn(Optional.of(order));
         when(bookingRepository.findByOrderId(ORDER_ID)).thenReturn(Optional.empty());
+        when(bookingDTOMapper.toBooking(bookingDTO)).thenReturn(booking);
 
         // when
         bookingService.saveBooking(bookingDTO);
 
         // then
-        Booking expectedSavedBooking = getBooking(order);
         verify(bookingRepository).saveBooking(bookingCaptor.capture());
-        verifyBooking(bookingCaptor.getValue(), expectedSavedBooking);
+        verifyBooking(bookingCaptor.getValue(), booking);
     }
 
     @Test

@@ -1,12 +1,10 @@
 package net.joelfernandes.OrderManagementSystem.application.order.in.model;
 
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-@Mapper()
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface OrderInputMapper {
-    OrderInputMapper INSTANCE = Mappers.getMapper(OrderInputMapper.class);
-
     Order toOrder(OrderInput orderInput);
 }

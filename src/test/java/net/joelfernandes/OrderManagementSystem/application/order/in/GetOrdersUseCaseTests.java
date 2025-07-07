@@ -5,13 +5,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.List;
-
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
 import net.joelfernandes.OrderManagementSystem.domain.order.service.OrderService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -26,17 +25,20 @@ class GetOrdersUseCaseTests {
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final Date ORDER_DATE = new Date();
 
-    @Mock
-    private OrderService orderService;
+    @Mock private OrderService orderService;
 
-    @InjectMocks
     private GetOrdersUseCase getOrdersUseCase;
+
+    @BeforeEach
+    void setUp() {
+        getOrdersUseCase = new GetOrdersUseCase(orderService);
+    }
 
     @Test
     void shouldGetOrders() {
         // given
-        Order order1 = getOrder();
-        when(orderService.getAllOrders()).thenReturn(List.of(order1));
+        Order order = getOrder();
+        when(orderService.getAllOrders()).thenReturn(List.of(order));
 
         // when
         List<Order> orders = getOrdersUseCase.getAllOrders();
@@ -44,7 +46,7 @@ class GetOrdersUseCaseTests {
         // then
         assertNotNull(orders);
         assertEquals(1, orders.size());
-        assertEquals(order1, orders.getFirst());
+        assertEquals(order, orders.getFirst());
     }
 
     private static Order getOrder() {
