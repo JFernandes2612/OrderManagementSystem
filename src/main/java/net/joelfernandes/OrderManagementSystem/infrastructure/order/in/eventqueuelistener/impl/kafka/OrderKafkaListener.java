@@ -19,7 +19,9 @@ public class OrderKafkaListener implements OrderBasicListener<Message<OrderInput
     private final SchemaOrderInputMapper schemaOrderInputMapper;
 
     @SneakyThrows
-    @KafkaListener(topics = topic, containerFactory = "orderListenerContainerFactory")
+    @KafkaListener(
+            topics = "${ordman.kafka.consumer.topic}",
+            containerFactory = "orderListenerContainerFactory")
     @Override
     public void receive(Message<OrderInput> in) {
         saveOrderUseCase.receiveOrder(schemaOrderInputMapper.toOrderInput(in.getPayload()));

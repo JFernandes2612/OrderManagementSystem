@@ -61,7 +61,7 @@
         <dependency>
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
-            <version>4.0.0-M2</version>
+            <version>3.2.5</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -132,6 +132,12 @@
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
             <version>4.9.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit-test</artifactId>
+            <version>3.2.5</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

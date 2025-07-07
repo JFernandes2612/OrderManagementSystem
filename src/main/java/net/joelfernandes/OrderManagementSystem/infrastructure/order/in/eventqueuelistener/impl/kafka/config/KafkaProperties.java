@@ -19,22 +19,22 @@ public class KafkaProperties {
 
     public static final String BASIC_AUTH_USER_INFO = "basic.auth.user.info";
 
-    @Value("${ordman.serviceaccount.namespace}")
+    @Value("${ordman.kafka.serviceaccount.namespace}")
     private String ordmanServiceaccountNamespace;
 
-    @Value("${ordman.sasl.mechanism}")
+    @Value("${ordman.kafka.sasl.mechanism}")
     private String saslMechanism;
 
-    @Value("${ordman.sasl.jaas.config}")
+    @Value("${ordman.kafka.sasl.jaas.config}")
     private String saslJaasConfig;
 
-    @Value("${ordman.basic.auth.credentials.source}")
+    @Value("${ordman.kafka.basic.auth.credentials.source}")
     private String basicAuthCredentialsSource;
 
-    @Value("${ordman.basic.auth.user.info}")
+    @Value("${ordman.kafka.basic.auth.user.info}")
     private String basicAuthUserInfo;
 
-    @Value("${ordman.security.protocol}")
+    @Value("${ordman.kafka.security.protocol}")
     private String securityProtocol;
 
     @Value("${ordman.kafka.consumer.bootstrap-servers-config}")
@@ -59,6 +59,27 @@ public class KafkaProperties {
     private String avroReader;
 
     public Map<String, Object> getKafkaConsumerProperties() {
+        Map<String, Object> props = getBaseProps();
+
+        addSecurityProps(props);
+
+        log.info("bootstrap_servers_config = {}", bootstrapServersConfig);
+        log.info("GROUP_ID_CONFIG = {}.{}", ordmanServiceaccountNamespace, groupId);
+        log.info("AUTO_OFFSET_RESET_CONFIG = {}", autoOffsetReset);
+        log.info("KEY_DESERIALIZER_CLASS_CONFIG = {}", keyDeserializerClassConfig);
+        log.info("VALUE_DESERIALIZER_CLASS_CONFIG = {}", valueDeserializeClassConfig);
+        log.info("SCHEMA_REGISTRY_URL_CONFIG = {}", schemaRegistryUrlConfig);
+        log.info("SPECIFIC_AVRO_READER_CONFIG = {}", avroReader);
+        log.info("SECURITY_PROTOCOL_CONFIG = {}", securityProtocol);
+        log.info("SASL_MECHANISM = {}", saslMechanism);
+        log.info("SASL_JAAS_CONFIG = {}", saslJaasConfig);
+        log.info("BASIC_AUTH_CREDENTIALS_SOURCE = {}", basicAuthCredentialsSource);
+        log.info("BASIC_AUTH_USER_INFO = {}", basicAuthUserInfo);
+
+        return props;
+    }
+
+    private Map<String, Object> getBaseProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServersConfig);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, ordmanServiceaccountNamespace + "." + groupId);
@@ -67,22 +88,6 @@ public class KafkaProperties {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializeClassConfig);
         props.put(KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrlConfig);
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, avroReader);
-
-        addSecurityProps(props);
-
-        log.info("bootstrap_servers_config = " + bootstrapServersConfig);
-        log.info("GROUP_ID_CONFIG = " + ordmanServiceaccountNamespace + "." + groupId);
-        log.info("AUTO_OFFSET_RESET_CONFIG = " + autoOffsetReset);
-        log.info("KEY_DESERIALIZER_CLASS_CONFIG = " + keyDeserializerClassConfig);
-        log.info("VALUE_DESERIALIZER_CLASS_CONFIG = " + valueDeserializeClassConfig);
-        log.info("SCHEMA_REGISTRY_URL_CONFIG = " + schemaRegistryUrlConfig);
-        log.info("SPECIFIC_AVRO_READER_CONFIG = " + avroReader);
-        log.info("SECURITY_PROTOCOL_CONFIG = " + securityProtocol);
-        log.info("SASL_MECHANISM = " + saslMechanism);
-        log.info("SASL_JAAS_CONFIG = " + saslJaasConfig);
-        log.info("BASIC_AUTH_CREDENTIALS_SOURCE = " + basicAuthCredentialsSource);
-        log.info("BASIC_AUTH_USER_INFO = " + basicAuthUserInfo);
-
         return props;
     }
 

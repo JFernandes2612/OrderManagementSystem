@@ -2,7 +2,6 @@ package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventque
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.joelfernandes.OrderManagementSystem.application.order.in.SaveOrderUseCase;
@@ -15,12 +14,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-@RabbitListener(queues = "inOrder")
+@RabbitListener(queues = "${ordman.rabbitmq.topic}")
 public class OrderRabbitListener implements OrderBasicListener<String> {
     private final SaveOrderUseCase saveOrderUseCase;
 
     @RabbitHandler
-    @Transactional
     @Override
     public void receive(String in) {
         OrderInput order = null;

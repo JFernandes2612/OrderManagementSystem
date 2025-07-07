@@ -21,24 +21,25 @@ spring:
 
 
 ordman:
-  serviceaccount:
-    name: user
-    password: password
-    namespace: ord.man
-  sasl:
-    mechanism: "PLAIN"
-    jaas:
-      config: org.apache.kafka.common.security.plain.PlainLoginModule required username='${ordman.serviceaccount.name}' password='${ordman.serviceaccount.password}';}
-  basic:
-    auth:
-      credentials:
-        source: USER_INFO
-      user:
-        info: ${ordman.serviceaccount.name}:${ordman.serviceaccount.password}
-  security:
-    protocol: "PLAINTEXT"
   kafka:
+    serviceaccount:
+      name: user
+      password: password
+      namespace: ord.man
+    sasl:
+      mechanism: "PLAIN"
+      jaas:
+        config: org.apache.kafka.common.security.plain.PlainLoginModule required username='${ordman.kafka.serviceaccount.name}' password='${ordman.kafka.serviceaccount.password}';}
+    basic:
+      auth:
+        credentials:
+          source: USER_INFO
+        user:
+          info: ${ordman.kafka.serviceaccount.name}:${ordman.kafka.serviceaccount.password}
+    security:
+      protocol: "PLAINTEXT"
     consumer:
+      topic: inOrder
       bootstrap-servers-config: http://localhost:9092
       schema-registry-url-config: http://localhost:8081
       group-id: order-management-system
@@ -48,3 +49,9 @@ ordman:
       specific:
         avro:
           reader: true
+  rabbitmq:
+    topic: inOrder
+    host: localhost
+    port: 5672
+    username: user
+    password: password
