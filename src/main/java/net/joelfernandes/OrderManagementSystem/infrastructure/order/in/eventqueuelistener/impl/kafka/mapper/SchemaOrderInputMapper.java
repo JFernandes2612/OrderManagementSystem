@@ -2,7 +2,7 @@ package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventque
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInput;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -16,7 +16,11 @@ public interface SchemaOrderInputMapper {
         return s.toString();
     }
 
-    default Date toDate(CharSequence s) throws ParseException {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(s.toString());
+    default LocalDateTime toDate(CharSequence s) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .parse(s.toString())
+                .toInstant()
+                .atZone(java.time.ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }

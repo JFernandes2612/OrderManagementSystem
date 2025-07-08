@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
@@ -37,7 +37,7 @@ class BookingDBAdapterTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     @Mock private BookingJPARepository bookingJPARepository;
     @Mock private BookingMapper bookingMapper;

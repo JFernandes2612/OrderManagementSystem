@@ -1,7 +1,7 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +18,9 @@ public class OrderEntity {
 
     private String customerName;
 
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "ORDER_ID")
     private List<OrderLineEntity> orderLines;
 }

@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.booking.model.Booking;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
@@ -30,7 +30,7 @@ class BookingEntityMapperTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     private final BookingEntityMapper bookingEntityMapper = new BookingEntityMapperImpl();
 

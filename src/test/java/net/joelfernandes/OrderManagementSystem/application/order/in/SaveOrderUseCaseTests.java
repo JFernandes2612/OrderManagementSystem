@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInput;
@@ -29,7 +29,7 @@ class SaveOrderUseCaseTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     @Mock private OrderService orderService;
     @Mock private OrderInputMapper orderInputMapper;

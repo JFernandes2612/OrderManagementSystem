@@ -2,8 +2,8 @@ package net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.enti
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
@@ -19,7 +19,7 @@ class OrderEntityMapperTests {
     private static final String ORDER1_ID = "orderId1";
     private static final String ORDER2_ID = "orderId2";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     private final OrderEntityMapper orderEntityMapper = new OrderEntityMapperImpl();
 

@@ -2,7 +2,7 @@ package net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.enti
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
@@ -17,7 +17,7 @@ class OrderMapperTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     private final OrderMapper orderMapper = new OrderMapperImpl();
 

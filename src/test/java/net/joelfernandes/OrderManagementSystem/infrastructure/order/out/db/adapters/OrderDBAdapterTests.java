@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
@@ -30,7 +30,7 @@ class OrderDBAdapterTests {
     private static final String ORDER_ID_1 = "orderId1";
     private static final String ORDER_ID_2 = "orderId1";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     @Mock private OrderJPARepository orderJPARepository;
     @Mock private OrderMapper orderMapper;

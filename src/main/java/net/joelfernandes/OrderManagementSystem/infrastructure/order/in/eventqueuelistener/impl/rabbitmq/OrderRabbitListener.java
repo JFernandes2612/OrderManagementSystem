@@ -1,7 +1,10 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventqueuelistener.impl.rabbitmq;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.joelfernandes.OrderManagementSystem.application.order.in.SaveOrderUseCase;
@@ -22,11 +25,18 @@ public class OrderRabbitListener implements OrderBasicListener<String> {
     @Override
     public void receive(String in) {
         OrderInput order = null;
+
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+
         try {
-            order = new ObjectMapper().readValue(in, OrderInput.class);
+            order = objectMapper.readValue(in, OrderInput.class);
         } catch (JsonProcessingException e) {
-            log.error("'%s' is invalid for Order Object.".formatted(in));
+            log.error(
+                    "'%s' is invalid for Order Object due to '%s'.".formatted(in, e.getMessage()));
+            return;
         }
+
         saveOrderUseCase.receiveOrder(order);
     }
 }

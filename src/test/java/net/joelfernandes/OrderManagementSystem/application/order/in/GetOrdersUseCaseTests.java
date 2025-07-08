@@ -3,7 +3,7 @@ package net.joelfernandes.OrderManagementSystem.application.order.in;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
@@ -23,7 +23,7 @@ class GetOrdersUseCaseTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     @Mock private OrderService orderService;
 

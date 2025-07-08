@@ -3,8 +3,7 @@ package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventque
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInput;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderLineInput;
@@ -19,16 +18,8 @@ class SchemaOrderInputMapperTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final String ORDER_DATE_STRING = "2024-09-30T20:57:46Z";
-    private static final Date ORDER_DATE;
-
-    static {
-        try {
-            ORDER_DATE = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(ORDER_DATE_STRING);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final String ORDER_DATE_STRING = "2024-09-30T20:57:46";
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.parse(ORDER_DATE_STRING);
 
     private final SchemaOrderInputMapper schemaOrderInputMapper = new SchemaOrderInputMapperImpl();
 

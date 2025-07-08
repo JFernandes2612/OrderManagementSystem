@@ -8,8 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.application.order.in.GetOrdersUseCase;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
@@ -31,7 +33,7 @@ class OrderControllerTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     @Autowired private MockMvc mockMvc;
 
@@ -64,7 +66,8 @@ class OrderControllerTests {
         ResultActions resultActions = mockMvc.perform(get("/order"));
 
         // then
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        ;
         String ordersJson = objectMapper.writeValueAsString(ordersReturning);
         resultActions
                 .andExpect(status().isOk())

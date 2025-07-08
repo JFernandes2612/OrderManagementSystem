@@ -11,7 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Date;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import net.joelfernandes.OrderManagementSystem.application.booking.in.GetBookingsUseCase;
@@ -42,7 +44,7 @@ class BookingControllerTests {
 
     private static final String ORDER_ID = "orderId";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
-    private static final Date ORDER_DATE = new Date();
+    private static final LocalDateTime ORDER_DATE = LocalDateTime.now();
 
     @Autowired private MockMvc mockMvc;
 
@@ -77,7 +79,7 @@ class BookingControllerTests {
         ResultActions resultActions = mockMvc.perform(get("/booking"));
 
         // then
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
         String bookingsJson = objectMapper.writeValueAsString(bookingsReturning);
         resultActions
                 .andExpect(status().isOk())
@@ -96,7 +98,7 @@ class BookingControllerTests {
         BookingInput bookingInput = getBookingInput();
 
         // when
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
         String bookingInputJson = objectMapper.writeValueAsString(bookingInput);
         ResultActions resultActions =
                 mockMvc.perform(
