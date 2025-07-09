@@ -1,4 +1,4 @@
-package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventqueuelistener.impl.rabbitmq;
+package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventqueuelistener.impl.kafka;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -12,8 +12,9 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 import net.joelfernandes.OrderManagementSystem.OrderManagementSystemIntegrationTests;
+import net.joelfernandes.OrderManagementSystem.avro.OrderInput;
+import net.joelfernandes.OrderManagementSystem.avro.OrderLineInput;
 import net.joelfernandes.OrderManagementSystem.domain.order.service.OrderService;
 import net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities.OrderEntity;
 import net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities.OrderLineEntity;
@@ -21,13 +22,19 @@ import net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.repos
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Import;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
-class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrationTests {
+@Import(KafkaTestProducerConfig.class)
+@EmbeddedKafka(
+        brokerProperties = "listeners=PLAINTEXT://localhost:9092",
+        partitions = 1,
+        topics = "${ordman.kafka.consumer.topic}")
+class OrderKafkaListenerIntegrationTests extends OrderManagementSystemIntegrationTests {
+
     private static final String ORDER_ID = "orderId";
     private static final String ORDER_CUSTOMER_NAME = "customerName";
     private static final String ORDER_DATE_STRING = "2024-09-30T20:57:46";
@@ -38,16 +45,12 @@ class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrati
     private static final long ORDER_LINE_QUANTITY = 1;
     private static final float ORDER_LINE_PRICE = 2.0f;
 
-    @Value("${ordman.rabbitmq.topic}")
+    @Value("${ordman.kafka.consumer.topic}")
     private String topic;
 
-    @Autowired private RabbitTemplate rabbitTemplate;
-
-    @Autowired private RabbitAdmin rabbitAdmin;
-
-    @Autowired private RabbitListenerEndpointRegistry rabbitListenerEndpointRegistry;
-
     @Autowired private OrderJPARepository orderJPARepository;
+
+    @Autowired private KafkaTemplate<String, OrderInput> testProducerKafkaTemplate;
 
     @BeforeEach
     void setUp() {
@@ -57,10 +60,10 @@ class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrati
     @Test
     void shouldSaveOrder() {
         // given
-        String orderJson = getOrderJson();
+        OrderInput orderInput = getOrderInput();
 
         // when
-        this.rabbitTemplate.convertAndSend(topic, orderJson);
+        this.testProducerKafkaTemplate.send(topic, orderInput);
 
         // then
         await().untilAsserted(
@@ -90,10 +93,10 @@ class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrati
 
         orderJPARepository.save(getOrderEntity());
 
-        String orderJson = getOrderJson();
+        OrderInput orderInput = getOrderInput();
 
         // when
-        this.rabbitTemplate.convertAndSend(topic, orderJson);
+        this.testProducerKafkaTemplate.send(topic, orderInput);
 
         // then
         await().untilAsserted(
@@ -139,36 +142,23 @@ class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrati
                 .build();
     }
 
-    private static String getOrderJson() {
-        Locale.setDefault(Locale.US);
-        return """
-                {
-                    "orderId": "%s",
-                    "customerName": "%s",
-                    "orderDate": "%s",
-                    "orderLines": [
-                        {
-                            "productId": "%s",
-                            "quantity": %d,
-                            "price": %.2f
-                        },
-                        {
-                            "productId": "%s",
-                            "quantity": %d,
-                            "price": %.2f
-                        }
-                    ]
-                }
-                """
-                .formatted(
-                        ORDER_ID,
-                        ORDER_CUSTOMER_NAME,
-                        ORDER_DATE_STRING,
-                        ORDER_LINE_PRODUCT1_ID,
-                        ORDER_LINE_QUANTITY,
-                        ORDER_LINE_PRICE,
-                        ORDER_LINE_PRODUCT2_ID,
-                        ORDER_LINE_QUANTITY,
-                        ORDER_LINE_PRICE);
+    private static OrderInput getOrderInput() {
+        return OrderInput.newBuilder()
+                .setOrderId(ORDER_ID)
+                .setCustomerName(ORDER_CUSTOMER_NAME)
+                .setOrderDate(ORDER_DATE_STRING)
+                .setOrderLines(
+                        List.of(
+                                OrderLineInput.newBuilder()
+                                        .setProductId(ORDER_LINE_PRODUCT1_ID)
+                                        .setQuantity(ORDER_LINE_QUANTITY)
+                                        .setPrice(ORDER_LINE_PRICE)
+                                        .build(),
+                                OrderLineInput.newBuilder()
+                                        .setProductId(ORDER_LINE_PRODUCT2_ID)
+                                        .setQuantity(ORDER_LINE_QUANTITY)
+                                        .setPrice(ORDER_LINE_PRICE)
+                                        .build()))
+                .build();
     }
 }

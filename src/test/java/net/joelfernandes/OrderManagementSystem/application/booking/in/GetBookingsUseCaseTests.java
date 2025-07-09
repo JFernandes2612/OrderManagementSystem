@@ -41,7 +41,7 @@ class GetBookingsUseCaseTests {
     }
 
     @Test
-    public void shouldReturnAllBookings() {
+    void shouldReturnAllBookings() {
         // given
         List<Booking> expectedBookings = List.of(getBooking());
         when(bookingService.getAllBookings()).thenReturn(expectedBookings);

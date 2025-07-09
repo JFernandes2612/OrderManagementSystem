@@ -1,7 +1,7 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventqueuelistener.impl.kafka.config;
 
-import io.cloudevents.CloudEvent;
 import java.net.ConnectException;
+import net.joelfernandes.OrderManagementSystem.avro.OrderInput;
 import org.apache.kafka.common.errors.RetriableException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,16 +19,16 @@ import org.springframework.util.backoff.FixedBackOff;
 public class OrderConsumerConfig {
 
     @Bean
-    public ConsumerFactory<String, CloudEvent> orderConsumerFactory(
+    public ConsumerFactory<String, OrderInput> orderConsumerFactory(
             KafkaProperties kafkaProperties) {
         return new DefaultKafkaConsumerFactory<>(kafkaProperties.getKafkaConsumerProperties());
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CloudEvent>
+    public ConcurrentKafkaListenerContainerFactory<String, OrderInput>
             orderListenerContainerFactory(
-                    ConsumerFactory<String, CloudEvent> cloudEventConsumerFactory) {
-        var factory = new ConcurrentKafkaListenerContainerFactory<String, CloudEvent>();
+                    ConsumerFactory<String, OrderInput> cloudEventConsumerFactory) {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderInput>();
         factory.setConsumerFactory(cloudEventConsumerFactory);
         var errorHandler =
                 new CommonDelegatingErrorHandler(

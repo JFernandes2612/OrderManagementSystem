@@ -2,3 +2,13 @@ spring:
   datasource.url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
   jpa:
     show-sql: false
+
+ordman:
+  kafka:
+    consumer:
+      topic: inOrder
+      schema-registry-url-config: mock://mockedurl
+      group-id: order-management-system-test
+  rabbitmq:
+    topic: inOrder
+

@@ -1,7 +1,7 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.order.in.eventqueuelistener.impl.kafka.config;
 
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
-import io.confluent.kafka.serializers.KafkaAvroSerializerConfig;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.NoArgsConstructor;
@@ -86,7 +86,8 @@ public class KafkaProperties {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, keyDeserializerClassConfig);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializeClassConfig);
-        props.put(KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrlConfig);
+        props.put(
+                AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrlConfig);
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, avroReader);
         return props;
     }
@@ -96,7 +97,7 @@ public class KafkaProperties {
         props.put(SaslConfigs.SASL_MECHANISM, saslMechanism);
         props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
         props.put(
-                KafkaAvroSerializerConfig.BASIC_AUTH_CREDENTIALS_SOURCE,
+                AbstractKafkaSchemaSerDeConfig.BASIC_AUTH_CREDENTIALS_SOURCE,
                 basicAuthCredentialsSource);
         props.put(BASIC_AUTH_USER_INFO, basicAuthUserInfo);
     }
