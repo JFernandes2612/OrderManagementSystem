@@ -3,7 +3,7 @@
     <module name="OrderManagementSystem" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="net.joelfernandes.OrderManagementSystem.infrastructure.OrderManagementSystemApplication" />
+        <option name="PATTERN" value="net.joelfernandes.ordermanagementsystem.infrastructure.OrderManagementSystemApplication" />
         <option name="ENABLED" value="true" />
         <option name="INCLUDE" value="false" />
       </pattern>

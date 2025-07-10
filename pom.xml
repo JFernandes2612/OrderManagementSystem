@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>net.joelfernandes</groupId>
-	<artifactId>OrderManagementSystem</artifactId>
+	<artifactId>ordermanagementsystem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>OrderManagementSystem</name>
 	<description>Order Management System</description>
