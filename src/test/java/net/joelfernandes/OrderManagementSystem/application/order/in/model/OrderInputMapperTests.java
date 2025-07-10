@@ -25,7 +25,7 @@ class OrderInputMapperTests {
     private final OrderInputMapper orderInputMapper = new OrderInputMapperImpl();
 
     @Test
-    public void shouldMapFromOrderInputToOrder() {
+    void shouldMapFromOrderInputToOrder() {
         // given
         OrderInput orderInput = getOrderInput();
 

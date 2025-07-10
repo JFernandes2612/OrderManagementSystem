@@ -22,7 +22,7 @@ class OrderMapperTests {
     private final OrderMapper orderMapper = new OrderMapperImpl();
 
     @Test
-    public void shouldMapFromOrderToOrderEntity() {
+    void shouldMapFromOrderToOrderEntity() {
         // given
         Order order = getOrder();
 

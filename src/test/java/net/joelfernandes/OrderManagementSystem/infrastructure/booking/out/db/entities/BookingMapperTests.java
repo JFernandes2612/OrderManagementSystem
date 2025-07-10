@@ -32,7 +32,7 @@ class BookingMapperTests {
     private final BookingMapper bookingMapper = new BookingMapperImpl();
 
     @Test
-    public void shouldMapBookingToBookingEntity() {
+    void shouldMapBookingToBookingEntity() {
         // given
         Booking booking = getBooking();
 
@@ -64,7 +64,7 @@ class BookingMapperTests {
     }
 
     @Test
-    public void shouldMapNullBookingToNullBookingEntity() {
+    void shouldMapNullBookingToNullBookingEntity() {
         // given + when
         BookingEntity bookingEntity = bookingMapper.toBookingEntity(null);
 
@@ -73,7 +73,7 @@ class BookingMapperTests {
     }
 
     @Test
-    public void shouldMapNullOrderOfBookingToNullOrderEntityOfBookingEntity() {
+    void shouldMapNullOrderOfBookingToNullOrderEntityOfBookingEntity() {
         // given
         Booking booking = Booking.builder().build();
 
@@ -85,7 +85,7 @@ class BookingMapperTests {
     }
 
     @Test
-    public void shouldMapNullOrderLineOfBookingToNullOrderLineEntityOfBookingEntity() {
+    void shouldMapNullOrderLineOfBookingToNullOrderLineEntityOfBookingEntity() {
         // given
         Order order = Order.builder().build();
         Booking booking = Booking.builder().order(order).build();
@@ -98,7 +98,7 @@ class BookingMapperTests {
     }
 
     @Test
-    public void shouldMapNullOrderLineInListOfBookingToNullOrderLineEntityInListOfBookingEntity() {
+    void shouldMapNullOrderLineInListOfBookingToNullOrderLineEntityInListOfBookingEntity() {
         // given
         List<OrderLine> orderLines = new ArrayList<>();
         orderLines.add(null);

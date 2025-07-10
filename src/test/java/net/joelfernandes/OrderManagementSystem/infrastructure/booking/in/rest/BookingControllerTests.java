@@ -53,7 +53,7 @@ class BookingControllerTests {
     @MockitoBean private SaveBookingUseCase saveBookingUseCase;
 
     @Test
-    public void shouldReturnEmptyListWhenNoBookingsExist() throws Exception {
+    void shouldReturnEmptyListWhenNoBookingsExist() throws Exception {
         // given
         when(getBookingsUseCase.getAllBookings()).thenReturn(List.of());
 
@@ -69,7 +69,7 @@ class BookingControllerTests {
     }
 
     @Test
-    public void shouldReturnListWithBookingsWhenBookingsExist() throws Exception {
+    void shouldReturnListWithBookingsWhenBookingsExist() throws Exception {
         // given
         Booking booking = getBooking();
         List<Booking> bookingsReturning = List.of(booking);
@@ -89,7 +89,7 @@ class BookingControllerTests {
     }
 
     @Test
-    public void shouldReturnBookingWhenSavingBookingSucceeds() throws Exception {
+    void shouldReturnBookingWhenSavingBookingSucceeds() throws Exception {
         // given
         Booking booking = getBooking();
         when(saveBookingUseCase.saveBooking(any(BookingInput.class)))
@@ -117,7 +117,7 @@ class BookingControllerTests {
     }
 
     @Test
-    public void shouldReturnBadRequestWhenSavingBookingFails() throws Exception {
+    void shouldReturnBadRequestWhenSavingBookingFails() throws Exception {
         // given
         when(saveBookingUseCase.saveBooking(any(BookingInput.class))).thenReturn(Optional.empty());
 
@@ -139,7 +139,7 @@ class BookingControllerTests {
     }
 
     @Test
-    public void shouldReturnBadRequestWhenSavingBookingWithInvalidInput() throws Exception {
+    void shouldReturnBadRequestWhenSavingBookingWithInvalidInput() throws Exception {
         // given
         BookingInput bookingInput = BookingInput.builder().build();
 

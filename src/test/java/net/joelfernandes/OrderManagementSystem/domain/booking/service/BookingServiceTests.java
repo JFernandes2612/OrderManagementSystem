@@ -60,8 +60,7 @@ public class BookingServiceTests {
     }
 
     @Test
-    public void
-            shouldSaveBookingWhenBookingDoesNotExistAndOrdersExistsAndIsNotAssociatedWithAnyBooking() {
+    void shouldSaveBookingWhenBookingDoesNotExistAndOrdersExistsAndIsNotAssociatedWithAnyBooking() {
         // given
         BookingDTO bookingDTO = getBookingDTO();
         Order order = getOrder();
@@ -81,7 +80,7 @@ public class BookingServiceTests {
     }
 
     @Test
-    public void shouldNotSaveBookingWhenBookingAlreadyExists() {
+    void shouldNotSaveBookingWhenBookingAlreadyExists() {
         // given
         ListAppender<ILoggingEvent> appender = new ListAppender<>();
         appender.start();
@@ -111,7 +110,7 @@ public class BookingServiceTests {
     }
 
     @Test
-    public void shouldNotSaveBookingWhenOrderDoesNotExist() {
+    void shouldNotSaveBookingWhenOrderDoesNotExist() {
         // given
         ListAppender<ILoggingEvent> appender = new ListAppender<>();
         appender.start();
@@ -140,7 +139,7 @@ public class BookingServiceTests {
     }
 
     @Test
-    public void shouldNotSaveBookingWhenOrderIsAlreadyAssociatedWithABooking() {
+    void shouldNotSaveBookingWhenOrderIsAlreadyAssociatedWithABooking() {
         // given
         ListAppender<ILoggingEvent> appender = new ListAppender<>();
         appender.start();
@@ -172,7 +171,7 @@ public class BookingServiceTests {
     }
 
     @Test
-    public void shouldGetAllBookings() {
+    void shouldGetAllBookings() {
         // given
         Booking booking1 = getBooking(getOrder());
         Booking booking2 = getBooking(getOrder());

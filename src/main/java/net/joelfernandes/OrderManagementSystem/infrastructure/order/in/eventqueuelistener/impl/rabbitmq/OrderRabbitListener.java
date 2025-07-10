@@ -32,8 +32,7 @@ public class OrderRabbitListener implements OrderBasicListener<String> {
         try {
             order = objectMapper.readValue(in, OrderInput.class);
         } catch (JsonProcessingException e) {
-            log.error(
-                    "'%s' is invalid for Order Object due to '%s'.".formatted(in, e.getMessage()));
+            log.error("'{}' is invalid for Order Object due to '{}'.", in, e.getMessage());
             return;
         }
 

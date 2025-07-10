@@ -49,7 +49,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void shouldSaveOrderWhenOrderDoesNotExistYet() {
+    void shouldSaveOrderWhenOrderDoesNotExistYet() {
         // given
         Order order = getOrder();
 
@@ -65,7 +65,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void shouldNotSaveOrderWhenOrderAlreadyExists() {
+    void shouldNotSaveOrderWhenOrderAlreadyExists() {
         // given
         ListAppender<ILoggingEvent> appender = new ListAppender<>();
         appender.start();
@@ -93,7 +93,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void shouldGetAllOrders() {
+    void shouldGetAllOrders() {
         // given
         Order order1 = getOrder();
         Order order2 = getOrder();

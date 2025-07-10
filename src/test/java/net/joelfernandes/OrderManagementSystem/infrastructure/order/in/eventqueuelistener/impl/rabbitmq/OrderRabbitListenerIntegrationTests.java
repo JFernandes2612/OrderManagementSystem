@@ -63,10 +63,7 @@ class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrati
         this.rabbitTemplate.convertAndSend(topic, orderJson);
 
         // then
-        await().untilAsserted(
-                        () -> {
-                            assertEquals(1, orderJPARepository.count());
-                        });
+        await().untilAsserted(() -> assertEquals(1, orderJPARepository.count()));
         OrderEntity orderEntity = orderJPARepository.findById(ORDER_ID).orElseThrow();
         assertEquals(ORDER_ID, orderEntity.getOrderId());
         assertEquals(ORDER_CUSTOMER_NAME, orderEntity.getCustomerName());
@@ -97,25 +94,66 @@ class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrati
 
         // then
         await().untilAsserted(
-                        () -> {
-                            assertNotEquals(2, orderJPARepository.count());
-                        });
+                        () ->
+                                assertThat(
+                                                appender.list.stream()
+                                                        .anyMatch(
+                                                                event ->
+                                                                        event.getFormattedMessage()
+                                                                                        .contains(
+                                                                                                format(
+                                                                                                        "Order with id '%s' already exists!",
+                                                                                                        ORDER_ID))
+                                                                                && event.getLevel()
+                                                                                        .equals(
+                                                                                                Level
+                                                                                                        .ERROR)))
+                                        .isTrue());
+        await().untilAsserted(() -> assertNotEquals(2, orderJPARepository.count()));
+        OrderEntity orderEntity = orderJPARepository.findById(ORDER_ID).orElseThrow();
+        assertEquals(ORDER_ID, orderEntity.getOrderId());
+        assertEquals(ORDER_CUSTOMER_NAME, orderEntity.getCustomerName());
+        assertEquals(ORDER_DATE_STRING, orderEntity.getOrderDate().toString());
+        assertEquals(2, orderEntity.getOrderLines().size());
+        assertEquals(ORDER_LINE_PRODUCT1_ID, orderEntity.getOrderLines().getFirst().getProductId());
+        assertEquals(ORDER_LINE_QUANTITY, orderEntity.getOrderLines().getFirst().getQuantity());
+        assertEquals(ORDER_LINE_PRICE, orderEntity.getOrderLines().getFirst().getPrice());
+        assertEquals(ORDER_LINE_PRODUCT2_ID, orderEntity.getOrderLines().getLast().getProductId());
+        assertEquals(ORDER_LINE_QUANTITY, orderEntity.getOrderLines().getLast().getQuantity());
+        assertEquals(ORDER_LINE_PRICE, orderEntity.getOrderLines().getLast().getPrice());
+    }
+
+    @Test
+    void shouldLogErrorForInvalidOrderJson() {
+        // given
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        Logger logger = (Logger) LoggerFactory.getLogger(OrderRabbitListener.class);
+        logger.addAppender(appender);
+
+        String invalidOrderJson = "{ \"invalidField\": \"invalidValue\" }";
+
+        // when
+        this.rabbitTemplate.convertAndSend(topic, invalidOrderJson);
+
+        // then
+        await().untilAsserted(
+                        () ->
+                                assertThat(
+                                                appender.list.stream()
+                                                        .anyMatch(
+                                                                event ->
+                                                                        event.getMessage()
+                                                                                        .contains(
+                                                                                                "'{}' is invalid for Order Object due to '{}'")
+                                                                                && event.getLevel()
+                                                                                        .equals(
+                                                                                                Level
+                                                                                                        .ERROR)))
+                                        .isTrue());
         await().untilAsserted(
                         () -> {
-                            assertThat(
-                                            appender.list.stream()
-                                                    .anyMatch(
-                                                            event ->
-                                                                    event.getFormattedMessage()
-                                                                                    .contains(
-                                                                                            format(
-                                                                                                    "Order with id '%s' already exists!",
-                                                                                                    ORDER_ID))
-                                                                            && event.getLevel()
-                                                                                    .equals(
-                                                                                            Level
-                                                                                                    .ERROR)))
-                                    .isTrue();
+                            assertEquals(0, orderJPARepository.count());
                         });
     }
 

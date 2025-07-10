@@ -31,17 +31,12 @@ public class OrderConsumerConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderInput>();
         factory.setConsumerFactory(cloudEventConsumerFactory);
         var errorHandler =
-                new CommonDelegatingErrorHandler(
-                        // By default, when there's an error stop retrying
-                        new CommonContainerStoppingErrorHandler());
+                new CommonDelegatingErrorHandler(new CommonContainerStoppingErrorHandler());
         errorHandler.addDelegate(
                 ConnectException.class,
-                new CustomErrorHandler(
-                        // If it can't connect to schema registry retry every 5 seconds
-                        new FixedBackOff(5000L, FixedBackOff.UNLIMITED_ATTEMPTS)));
-        var exponentialBackOff =
-                new ExponentialBackOff(1000L, 2); // Start with 1 second and double every try
-        exponentialBackOff.setMaxAttempts(5); // Fail after 5 attempts
+                new CustomErrorHandler(new FixedBackOff(5000L, FixedBackOff.UNLIMITED_ATTEMPTS)));
+        var exponentialBackOff = new ExponentialBackOff(1000L, 2);
+        exponentialBackOff.setMaxAttempts(3);
         errorHandler.addDelegate(
                 RetriableException.class, new CustomErrorHandler(exponentialBackOff));
         errorHandler.setCauseChainTraversing(true);

@@ -35,7 +35,7 @@ class BookingEntityMapperTests {
     private final BookingEntityMapper bookingEntityMapper = new BookingEntityMapperImpl();
 
     @Test
-    public void shouldMapBookingEntityToBooking() {
+    void shouldMapBookingEntityToBooking() {
         // given
         BookingEntity bookingEntity = getBookingEntity(BOOKING1_ID);
 
@@ -47,7 +47,7 @@ class BookingEntityMapperTests {
     }
 
     @Test
-    public void shouldMapNullBookingEntityToNullBooking() {
+    void shouldMapNullBookingEntityToNullBooking() {
         // given + when
         Booking booking = bookingEntityMapper.toBooking(null);
 
@@ -56,7 +56,7 @@ class BookingEntityMapperTests {
     }
 
     @Test
-    public void shouldMapNullOrderEntityOfBookingToNullOrderOfBooking() {
+    void shouldMapNullOrderEntityOfBookingToNullOrderOfBooking() {
         // given
         BookingEntity bookingEntity = BookingEntity.builder().order(null).build();
 
@@ -69,7 +69,7 @@ class BookingEntityMapperTests {
     }
 
     @Test
-    public void shouldMapNullOrderLineEntityListOfBookingToNullOrderLineListOfBooking() {
+    void shouldMapNullOrderLineEntityListOfBookingToNullOrderLineListOfBooking() {
         // given
         OrderEntity orderEntity = OrderEntity.builder().orderLines(null).build();
 
@@ -85,7 +85,7 @@ class BookingEntityMapperTests {
     }
 
     @Test
-    public void shouldMapNullOrderLineEntityInListOfBookingToNullOrderLineInList() {
+    void shouldMapNullOrderLineEntityInListOfBookingToNullOrderLineInList() {
         // given
         List<OrderLineEntity> orderLineEntities = new ArrayList<>();
         orderLineEntities.add(null);
@@ -104,7 +104,7 @@ class BookingEntityMapperTests {
     }
 
     @Test
-    public void shouldMapBookingEntityListToBookingList() {
+    void shouldMapBookingEntityListToBookingList() {
         // given
         BookingEntity firstBookingEntity = getBookingEntity(BOOKING1_ID);
         BookingEntity secondBookingEntity = getBookingEntity(BOOKING2_ID);
@@ -123,7 +123,7 @@ class BookingEntityMapperTests {
     }
 
     @Test
-    public void shouldMapNullBookingEntityListToNullBooking() {
+    void shouldMapNullBookingEntityListToNullBooking() {
         // given + when
         List<Booking> bookings = bookingEntityMapper.toBookingList(null);
 

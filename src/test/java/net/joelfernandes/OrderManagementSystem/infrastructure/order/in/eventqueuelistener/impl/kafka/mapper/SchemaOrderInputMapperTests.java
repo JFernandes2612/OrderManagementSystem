@@ -24,7 +24,7 @@ class SchemaOrderInputMapperTests {
     private final SchemaOrderInputMapper schemaOrderInputMapper = new SchemaOrderInputMapperImpl();
 
     @Test
-    public void shouldMapSchemaOrderInputToOrderInput() throws ParseException {
+    void shouldMapSchemaOrderInputToOrderInput() throws ParseException {
         // given
         net.joelfernandes.OrderManagementSystem.avro.OrderInput schemaOrderInput =
                 getSchemaOrderInput();

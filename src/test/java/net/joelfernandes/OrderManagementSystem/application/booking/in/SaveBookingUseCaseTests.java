@@ -47,7 +47,7 @@ class SaveBookingUseCaseTests {
     }
 
     @Test
-    public void shouldReturnOptionalWithBookingWhenBookingIsSaved() {
+    void shouldReturnOptionalWithBookingWhenBookingIsSaved() {
         // given
         BookingInput bookingInput = getBookingInput();
         Booking booking = getBooking();
@@ -65,7 +65,7 @@ class SaveBookingUseCaseTests {
     }
 
     @Test
-    public void shouldReturnEmptyOptionalWhenBookingIsNotSaved() {
+    void shouldReturnEmptyOptionalWhenBookingIsNotSaved() {
         // given
         BookingInput bookingInput = getBookingInput();
 

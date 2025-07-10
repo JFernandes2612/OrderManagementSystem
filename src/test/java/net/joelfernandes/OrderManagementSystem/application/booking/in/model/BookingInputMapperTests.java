@@ -17,7 +17,7 @@ class BookingInputMapperTests {
     private final BookingInputMapper bookingInputMapper = new BookingInputMapperImpl();
 
     @Test
-    public void shouldMapFromBookingInputToBookingDTO() {
+    void shouldMapFromBookingInputToBookingDTO() {
         // given
         BookingInput bookingInput =
                 BookingInput.builder()
@@ -40,7 +40,7 @@ class BookingInputMapperTests {
     }
 
     @Test
-    public void shouldMapFromNullBookingInputToNullBookingDTO() {
+    void shouldMapFromNullBookingInputToNullBookingDTO() {
         // when
         BookingDTO bookingDTO = bookingInputMapper.toBookingDTO(null);
 
