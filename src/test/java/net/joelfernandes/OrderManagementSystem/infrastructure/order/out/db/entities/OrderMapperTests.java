@@ -1,8 +1,11 @@
 package net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.OrderLine;
@@ -44,6 +47,87 @@ class OrderMapperTests {
         assertEquals(ORDER_LINE_PRODUCT2_ID, secondOrderLineEntity.getProductId());
         assertEquals(ORDER_LINE_QUANTITY, secondOrderLineEntity.getQuantity());
         assertEquals(ORDER_LINE_PRICE, secondOrderLineEntity.getPrice());
+    }
+
+    @Test
+    void shouldReturnNullWhenOrderIsNull() {
+        // when
+        OrderEntity orderEntity = orderMapper.toOrderEntity(null);
+
+        // then
+        assertNull(orderEntity);
+    }
+
+    @Test
+    void shouldReturnNullOrderLineEntityListWhenOrderLinesAreNull() {
+        // given
+        Order order =
+                Order.builder()
+                        .orderId(ORDER_ID)
+                        .customerName(ORDER_CUSTOMER_NAME)
+                        .orderDate(ORDER_DATE)
+                        .orderLines(null)
+                        .build();
+
+        // when
+        OrderEntity orderEntity = orderMapper.toOrderEntity(order);
+
+        // then
+        assertEquals(ORDER_ID, orderEntity.getOrderId());
+        assertEquals(ORDER_CUSTOMER_NAME, orderEntity.getCustomerName());
+        assertEquals(ORDER_DATE, orderEntity.getOrderDate());
+        assertNull(orderEntity.getOrderLines());
+    }
+
+    @Test
+    void shouldReturnNullWhenOrderLineIsNull() {
+        // given
+        List<OrderLine> orderLines = new ArrayList<>();
+        orderLines.add(null);
+        Order order =
+                Order.builder()
+                        .orderId(ORDER_ID)
+                        .customerName(ORDER_CUSTOMER_NAME)
+                        .orderDate(ORDER_DATE)
+                        .orderLines(orderLines)
+                        .build();
+
+        // when
+        OrderEntity orderEntity = orderMapper.toOrderEntity(order);
+
+        // then
+        assertEquals(ORDER_ID, orderEntity.getOrderId());
+        assertEquals(ORDER_CUSTOMER_NAME, orderEntity.getCustomerName());
+        assertEquals(ORDER_DATE, orderEntity.getOrderDate());
+        assertNotNull(orderEntity.getOrderLines());
+        assertNull(orderEntity.getOrderLines().getFirst());
+    }
+
+    @Test
+    void shouldMapOrderLineIdIfExists() {
+        // given
+        OrderLine orderLine =
+                OrderLine.builder()
+                        .id(1L)
+                        .productId(ORDER_LINE_PRODUCT1_ID)
+                        .quantity(ORDER_LINE_QUANTITY)
+                        .price(ORDER_LINE_PRICE)
+                        .build();
+        Order order =
+                Order.builder()
+                        .orderId(ORDER_ID)
+                        .customerName(ORDER_CUSTOMER_NAME)
+                        .orderDate(ORDER_DATE)
+                        .orderLines(List.of(orderLine))
+                        .build();
+
+        // when
+        OrderEntity orderEntity = orderMapper.toOrderEntity(order);
+
+        // then
+        assertNotNull(orderEntity.getOrderLines());
+        assertEquals(1, orderEntity.getOrderLines().size());
+        assertEquals(Long.valueOf(1), orderEntity.getOrderLines().getFirst().getId());
     }
 
     private static Order getOrder() {

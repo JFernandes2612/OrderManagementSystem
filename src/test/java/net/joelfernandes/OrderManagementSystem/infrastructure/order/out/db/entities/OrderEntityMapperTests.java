@@ -3,6 +3,7 @@ package net.joelfernandes.OrderManagementSystem.infrastructure.order.out.db.enti
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.domain.order.model.Order;
@@ -36,6 +37,62 @@ class OrderEntityMapperTests {
     }
 
     @Test
+    void shouldReturnNullWhenOrderEntityIsNull() {
+        // when
+        Order order = orderEntityMapper.toOrder(null);
+
+        // then
+        assertNull(order);
+    }
+
+    @Test
+    void shouldReturnEmptyOrderLinesWhenOrderEntityHasNoOrderLines() {
+        // given
+        OrderEntity orderEntity =
+                OrderEntity.builder()
+                        .orderId(ORDER1_ID)
+                        .customerName(ORDER_CUSTOMER_NAME)
+                        .orderDate(ORDER_DATE)
+                        .orderLines(null)
+                        .build();
+
+        // when
+        Order order = orderEntityMapper.toOrder(orderEntity);
+
+        // then
+        assertNotNull(order);
+        assertEquals(ORDER1_ID, order.getOrderId());
+        assertEquals(ORDER_CUSTOMER_NAME, order.getCustomerName());
+        assertEquals(ORDER_DATE, order.getOrderDate());
+        assertNull(order.getOrderLines());
+    }
+
+    @Test
+    void shouldReturnEmptyOrderLinesWhenOrderEntityHasEmptyOrderLines() {
+        // given
+        List<OrderLineEntity> emptyOrderLines = new ArrayList<>();
+        emptyOrderLines.add(null);
+        OrderEntity orderEntity =
+                OrderEntity.builder()
+                        .orderId(ORDER1_ID)
+                        .customerName(ORDER_CUSTOMER_NAME)
+                        .orderDate(ORDER_DATE)
+                        .orderLines(emptyOrderLines)
+                        .build();
+
+        // when
+        Order order = orderEntityMapper.toOrder(orderEntity);
+
+        // then
+        assertNotNull(order);
+        assertEquals(ORDER1_ID, order.getOrderId());
+        assertEquals(ORDER_CUSTOMER_NAME, order.getCustomerName());
+        assertEquals(ORDER_DATE, order.getOrderDate());
+        assertNotNull(order.getOrderLines());
+        assertNull(order.getOrderLines().getFirst());
+    }
+
+    @Test
     void toOrderList() {
         // given
         OrderEntity orderEntity1 = getOrderEntity(ORDER1_ID);
@@ -51,6 +108,15 @@ class OrderEntityMapperTests {
 
         checkOrder(orders.get(0), ORDER1_ID);
         checkOrder(orders.get(1), ORDER2_ID);
+    }
+
+    @Test
+    void shouldReturnNullWhenOrderEntityListIsNull() {
+        // when
+        List<Order> orders = orderEntityMapper.toOrderList(null);
+
+        // then
+        assertNull(orders);
     }
 
     private void checkOrder(Order order, String orderId) {

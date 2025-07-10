@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderInput;
 import net.joelfernandes.OrderManagementSystem.application.order.in.model.OrderLineInput;
@@ -47,6 +48,61 @@ class SchemaOrderInputMapperTests {
         assertEquals(ORDER_LINE_PRODUCT2_ID, secondOrderLine.getProductId());
         assertEquals(ORDER_LINE_QUANTITY, secondOrderLine.getQuantity());
         assertEquals(ORDER_LINE_PRICE, secondOrderLine.getPrice());
+    }
+
+    @Test
+    void shouldReturnNullWhenSchemaOrderInputIsNull() throws ParseException {
+        // given + when
+        OrderInput order = schemaOrderInputMapper.toOrderInput(null);
+
+        // then
+        assertNull(order);
+    }
+
+    @Test
+    void shouldReturnNullWhenSchemaOrderLineInputIsNull() throws ParseException {
+        // given
+        net.joelfernandes.OrderManagementSystem.avro.OrderInput schemaOrderInput =
+                net.joelfernandes.OrderManagementSystem.avro
+                        .OrderInput
+                        .newBuilder()
+                        .setOrderId(ORDER_ID)
+                        .setCustomerName(ORDER_CUSTOMER_NAME)
+                        .setOrderDate(ORDER_DATE_STRING)
+                        .setOrderLines(List.of())
+                        .build();
+        schemaOrderInput.setOrderLines(null);
+
+        // when
+        OrderInput order = schemaOrderInputMapper.toOrderInput(schemaOrderInput);
+
+        // then
+        assertNotNull(order);
+        assertNull(order.getOrderLines());
+    }
+
+    @Test
+    void shouldReturnNullSchemaOrderLineInputWhenSchemaOrderLineInputValueInArrayIsNull() throws ParseException {
+        // given
+        List<net.joelfernandes.OrderManagementSystem.avro.OrderLineInput> orderLines = new ArrayList<>();
+        orderLines.add(null);
+        net.joelfernandes.OrderManagementSystem.avro.OrderInput schemaOrderInput =
+                net.joelfernandes.OrderManagementSystem.avro
+                        .OrderInput
+                        .newBuilder()
+                        .setOrderId(ORDER_ID)
+                        .setCustomerName(ORDER_CUSTOMER_NAME)
+                        .setOrderDate(ORDER_DATE_STRING)
+                        .setOrderLines(orderLines)
+                        .build();
+
+        // when
+        OrderInput order = schemaOrderInputMapper.toOrderInput(schemaOrderInput);
+
+        // then
+        assertNotNull(order);
+        assertEquals(1, order.getOrderLines().size());
+        assertNull(order.getOrderLines().getFirst());
     }
 
     private static net.joelfernandes.OrderManagementSystem.avro.OrderInput getSchemaOrderInput() {
