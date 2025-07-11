@@ -46,6 +46,7 @@ ordman:
       auto-offset-reset: earliest
       key-deserializer-class-config: org.apache.kafka.common.serialization.StringDeserializer
       value-deserialize-class-config: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      auto-create-topics: true
       specific:
         avro:
           reader: true

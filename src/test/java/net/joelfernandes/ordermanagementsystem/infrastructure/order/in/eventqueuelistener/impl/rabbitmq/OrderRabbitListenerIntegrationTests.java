@@ -18,7 +18,7 @@ import net.joelfernandes.ordermanagementsystem.domain.order.service.OrderService
 import net.joelfernandes.ordermanagementsystem.infrastructure.order.out.db.entities.OrderEntity;
 import net.joelfernandes.ordermanagementsystem.infrastructure.order.out.db.entities.OrderLineEntity;
 import net.joelfernandes.ordermanagementsystem.infrastructure.order.out.db.repositories.OrderJPARepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -49,8 +49,8 @@ class OrderRabbitListenerIntegrationTests extends OrderManagementSystemIntegrati
 
     @Autowired private OrderJPARepository orderJPARepository;
 
-    @BeforeEach
-    void setUp() {
+    @AfterEach
+    void tearDown() {
         orderJPARepository.deleteAll();
     }
 

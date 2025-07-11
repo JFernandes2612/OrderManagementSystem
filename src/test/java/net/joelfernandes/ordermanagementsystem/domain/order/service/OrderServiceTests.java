@@ -8,6 +8,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
@@ -85,10 +86,11 @@ class OrderServiceTests {
                         .anyMatch(
                                 event ->
                                         event.getFormattedMessage()
-                                                .contains(
-                                                        format(
-                                                                "Order with id '%s' already exists!",
-                                                                ORDER_ID))));
+                                                        .contains(
+                                                                format(
+                                                                        "Order with id '%s' already exists!",
+                                                                        ORDER_ID))
+                                                && event.getLevel().equals(Level.ERROR)));
         appender.stop();
     }
 

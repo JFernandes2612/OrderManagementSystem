@@ -8,6 +8,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
@@ -31,7 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class BookingServiceTests {
+class BookingServiceTests {
     private static final String BOOKING_ID = "bookingId";
     private static final String BOOKING_CUSTOMER_CODE = "customerCode";
     private static final String BOOKING_SUPPLIER_CODE = "supplierCode";
@@ -103,10 +104,11 @@ public class BookingServiceTests {
                         .anyMatch(
                                 event ->
                                         event.getFormattedMessage()
-                                                .contains(
-                                                        format(
-                                                                "Booking with id '%s' already exists!",
-                                                                BOOKING_ID))));
+                                                        .contains(
+                                                                format(
+                                                                        "Booking with id '%s' already exists!",
+                                                                        BOOKING_ID))
+                                                && event.getLevel().equals(Level.ERROR)));
     }
 
     @Test
@@ -132,10 +134,11 @@ public class BookingServiceTests {
                         .anyMatch(
                                 event ->
                                         event.getFormattedMessage()
-                                                .contains(
-                                                        format(
-                                                                "Order '%s' to create booking with id '%s' does not exists!",
-                                                                ORDER_ID, BOOKING_ID))));
+                                                        .contains(
+                                                                format(
+                                                                        "Order '%s' to create booking with id '%s' does not exists!",
+                                                                        ORDER_ID, BOOKING_ID))
+                                                && event.getLevel().equals(Level.ERROR)));
     }
 
     @Test
@@ -164,10 +167,11 @@ public class BookingServiceTests {
                         .anyMatch(
                                 event ->
                                         event.getFormattedMessage()
-                                                .contains(
-                                                        format(
-                                                                "Order '%s' is already assigned to booking with id '%s'!",
-                                                                ORDER_ID, BOOKING_ID))));
+                                                        .contains(
+                                                                format(
+                                                                        "Order '%s' is already assigned to booking with id '%s'!",
+                                                                        ORDER_ID, BOOKING_ID))
+                                                && event.getLevel().equals(Level.ERROR)));
     }
 
     @Test

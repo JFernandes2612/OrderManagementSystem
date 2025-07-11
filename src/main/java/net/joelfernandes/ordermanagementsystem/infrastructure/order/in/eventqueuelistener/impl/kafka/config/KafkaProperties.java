@@ -55,6 +55,9 @@ public class KafkaProperties {
     @Value("${ordman.kafka.consumer.value-deserialize-class-config}")
     private String valueDeserializeClassConfig;
 
+    @Value("${ordman.kafka.consumer.auto-create-topics}")
+    private boolean autoCreateTopics;
+
     @Value("${ordman.kafka.consumer.specific.avro.reader}")
     private String avroReader;
 
@@ -89,6 +92,7 @@ public class KafkaProperties {
         props.put(
                 AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrlConfig);
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, avroReader);
+        props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, true);
         return props;
     }
 

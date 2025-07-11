@@ -13,7 +13,7 @@ public class Order {
     private String orderId;
     private String customerName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "EEE MMM dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
     @JsonProperty("orderDate")
     private LocalDateTime orderDate;
 

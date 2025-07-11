@@ -23,7 +23,7 @@ import net.joelfernandes.ordermanagementsystem.infrastructure.order.out.db.entit
 import net.joelfernandes.ordermanagementsystem.infrastructure.order.out.db.entities.OrderLineEntity;
 import net.joelfernandes.ordermanagementsystem.infrastructure.order.out.db.repositories.OrderJPARepository;
 import org.apache.kafka.common.errors.DisconnectException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +57,8 @@ class OrderKafkaListenerIntegrationTests extends OrderManagementSystemIntegratio
 
     @Autowired private KafkaTemplate<String, OrderInput> testProducerKafkaTemplate;
 
-    @BeforeEach
-    void setUp() {
+    @AfterEach
+    void tearDown() {
         orderJPARepository.deleteAll();
     }
 
