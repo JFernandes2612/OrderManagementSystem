@@ -154,13 +154,25 @@
         <dependency>
             <groupId>io.gatling</groupId>
             <artifactId>gatling-app</artifactId>
-            <version>3.13.5</version>
+            <version>3.11.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
-            <version>3.13.5</version>
+            <version>3.11.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.galaxio</groupId>
+            <artifactId>gatling-amqp-plugin_2.13</artifactId>
+            <version>0.13.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.galaxio</groupId>
+            <artifactId>gatling-kafka-plugin_2.13</artifactId>
+            <version>0.15.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

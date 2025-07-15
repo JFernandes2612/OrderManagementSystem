@@ -24,7 +24,7 @@ public class OrderRabbitListener implements OrderBasicListener<String> {
     @RabbitHandler
     @Override
     public void receive(String in) {
-        OrderInput order = null;
+        OrderInput order;
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
